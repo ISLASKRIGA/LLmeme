@@ -1,4 +1,4 @@
-// Contest-Winning LLMeme Engine: High-IQ Variety Comedy Engine (Zero "Dignidad" or Depressive Clichés)
+// LLMeme Engine: Simple, Short & Ultra-Punchy Meme Captions (2-5 words max!)
 import { GIF_REPERTOIRE } from './memeCatalog';
 
 export const GEMINI_KEYS = [
@@ -50,7 +50,7 @@ function parseJsonResponse(rawText) {
   return null;
 }
 
-// Gemini API Query with Strict Anti-Cliché Rules (No "dignidad", No "destruido", No "salud mental")
+// Gemini API Query forcing ULTRA-SIMPLE & SHORT meme texts
 async function queryGeminiGIF(prompt, availableGifs, customKey = null) {
   const keysToTry = customKey && customKey.trim().length > 10
     ? [customKey.trim(), ...GEMINI_KEYS]
@@ -59,30 +59,28 @@ async function queryGeminiGIF(prompt, availableGifs, customKey = null) {
   const shuffledAvailable = shuffleArray(availableGifs);
   const availableNamesList = shuffledAvailable.map(g => `"${g.name}"`).join(", ");
 
-  const promptText = `Eres el Stand-Up Comedian de IA número 1 del mundo. Estás concursando en el HACKATHON MUNDIAL DE MEMES.
-Tu tarea es crear un meme INTELIGENTE, BRILLANTE Y DE RISA GENUINA en español para esta frase:
+  const promptText = `Eres el Maestro del Humor Sencillo. Crea un meme ULTRA SENCILLO, CORTO Y DIRECTO en español para esta frase:
 
 Frase del usuario: "${prompt}"
 
-REGLAS STRICTAS DE HUMOR INTELIGENTE:
+REGLAS DE ORO (MEMES SENCILLOS):
 1. Elige EXACTAMENTE UNO de estos GIFs disponibles: [${availableNamesList}].
-2. NUNCA NUNCA NUNCA uses las palabras "dignidad", "destruido", "autoestima", "salud mental", ni "procesando". PROHIBIDO EL HUMOR DEPRESIVO O CLICHÉ.
-3. Sé picante, sarcástico, irónico, astuto, victorioso o exageradamente cómico.
-4. El topText prepara el chiste (máx 7 palabras).
-5. El bottomText da el remate brillante que hace estallar de risa (máx 10 palabras).
-6. La etiqueta "emotion" es una actitud cómica con emoji (ej: "😎 Sarcasmo Nivel Dios", "🔥 Respuesta Salvaje", "🏆 Modo Leyenda", "🤡 Genio Incomprendido").
+2. El topText debe ser SENCILLO Y CORTO (MÁXIMO 3 A 5 PALABRAS).
+3. El bottomText debe ser EL REMATE DIRECTO (MÁXIMO 3 A 5 PALABRAS).
+4. CERO textos largos. CERO frases tristes. CERO rodeos. Directo al grano.
+5. La etiqueta "emotion" es una actitud cómica corta de 2 palabras con emoji.
 
-EJEMPLOS DE BUEN HUMOR (Copiar este estilo):
-- Frase: "Mi ex me mandó mensaje a las 3am" -> topText: "03:00 AM: 'Te extraño...'" / bottomText: "Bloqueado antes de que termine de escribir el signo de interrogación 😎"
-- Frase: "Se cayó producción un viernes 5pm" -> topText: "Se cayó el sistema un Viernes 4:59 PM:" / bottomText: "El Senior: 'Yo no vi nada, ya estoy en la playa' 🏖️🍹"
-- Frase: "El cliente pidió un cambio de 5 min" -> topText: "'Es un cambio pequeñito de 5 minutos'" / bottomText: "Procedo a cobrarle 3 semanas de consultoría extra 💸🔥"
+EJEMPLOS DE MEMES SENCILLOS PERFECTOS:
+- Frase: "Mi ex me mandó mensaje a las 3am" -> topText: "03:00 AM: 'Te extraño'" / bottomText: "Bloqueado al instante 😎"
+- Frase: "Se cayó producción un viernes 5pm" -> topText: "Viernes 4:59 PM:" / bottomText: "El Senior en la playa 🏖️"
+- Frase: "El cliente pidió un cambio de 5 min" -> topText: "'Es un cambio pequeñito'" / bottomText: "Procedo a cobrar extra 💸"
 
 Responde ÚNICAMENTE en JSON:
 {
   "template_name": "Nombre exacto del GIF elegido de la lista",
-  "topText": "Texto superior gracioso e inteligente",
-  "bottomText": "Remate astuto y picante",
-  "emotion": "😎 Actitud Cómica"
+  "topText": "Texto superior corto (3-5 palabras)",
+  "bottomText": "Remate directo (3-5 palabras)",
+  "emotion": "😎 Actitud Corta"
 }`;
 
   const startIndex = currentKeyIndex;
@@ -104,9 +102,9 @@ Responde ÚNICAMENTE en JSON:
         body: JSON.stringify({
           contents: [{ parts: [{ text: promptText }] }],
           generationConfig: {
-            maxOutputTokens: 220,
-            temperature: 1.0,
-            topP: 0.95
+            maxOutputTokens: 180,
+            temperature: 0.9,
+            topP: 0.9
           }
         })
       });
@@ -159,52 +157,26 @@ function matchUnusedGif(templateName, availableGifs) {
   return shuffleArray(availableGifs)[0];
 }
 
-// Diversity Comedy Engine with 20+ Diverse Humor Archetypes (Zero Depressive Clichés!)
-function generateDiverseWittyPunchline(promptText) {
+// Simple & Short Fallback Punchline Engine (Strictly 2-5 words!)
+function generateSimplePunchline(promptText) {
   const cleanPrompt = promptText.trim();
-  const lower = normalizeText(cleanPrompt);
   const words = cleanPrompt.split(/\s+/);
-  const subject = words.length > 4 ? words.slice(0, 4).join(" ") : cleanPrompt;
+  const shortHead = words.slice(0, Math.min(3, words.length)).join(" ");
 
-  const comedyArchetypes = [
-    // Archetype 1: Savage Comeback / Flexing
-    {
-      top: `Cuando alguien llega con: "${subject}..."`,
-      bottom: `Respondiendo con una sonrisa de superioridad absoluta 😏✨`
-    },
-    // Archetype 2: Pure Irony
-    {
-      top: `Plan maestro: "${cleanPrompt.slice(0, 30)}"`,
-      bottom: `Resultado real: 100% caos y 0% arrepentimiento 🔥💥`
-    },
-    // Archetype 3: Absurd Genius
-    {
-      top: `Nivel de intelecto al escuchar esto:`,
-      bottom: `Ganando el Premio Nobel a la lógica inexplicable 🧠🏆`
-    },
-    // Archetype 4: Sarcastic Reality
-    {
-      top: `El mundo: "${cleanPrompt.slice(0, 28)}..."`,
-      bottom: `Yo: "Ah claro, y mañana va a llover dinero" 💸🙄`
-    },
-    // Archetype 5: Confident Escape
-    {
-      top: `Frente al dilema de: "${subject}"`,
-      bottom: `Modo leyenda activado: Me retiro en victoria 😎🚀`
-    },
-    // Archetype 6: Bold Business Mind
-    {
-      top: `Planteando la situación de "${subject}"`,
-      bottom: `Procedo a cobrar honorarios de consultoría internacional 📊💼`
-    }
+  const simpleMemes = [
+    { top: `Frente a: "${shortHead}"`, bottom: "Modo leyenda activado 😎" },
+    { top: `Cuando dicen: "${shortHead}"`, bottom: "Procedo a cobrar extra 💸" },
+    { top: `Situación: "${shortHead}"`, bottom: "Cero dudas, 100% estilo 🔥" },
+    { top: `Escuchando: "${shortHead}"`, bottom: "Respuesta salvaje activada 😏" },
+    { top: `Planteando: "${shortHead}"`, bottom: "Resultado: Éxito total 🏆" }
   ];
 
-  let chosen = comedyArchetypes[Math.floor(Math.random() * comedyArchetypes.length)];
+  let chosen = simpleMemes[Math.floor(Math.random() * simpleMemes.length)];
   let signature = `${normalizeText(chosen.top)}_${normalizeText(chosen.bottom)}`;
   let attempts = 0;
 
   while (sessionUsedTextSignatures.has(signature) && attempts < 10) {
-    chosen = comedyArchetypes[Math.floor(Math.random() * comedyArchetypes.length)];
+    chosen = simpleMemes[Math.floor(Math.random() * simpleMemes.length)];
     signature = `${normalizeText(chosen.top)}_${normalizeText(chosen.bottom)}`;
     attempts++;
   }
@@ -225,17 +197,17 @@ export async function queryLLMeme(promptText, customApiKey = null) {
   let selectedGif = shuffleArray(availableGifs)[0];
   let topText = "";
   let bottomText = "";
-  let emotionTag = "😎 Sarcasmo Nivel Dios";
+  let emotionTag = "😎 Meme Sencillo";
 
   if (aiResult && aiResult.template_name && aiResult.topText && aiResult.bottomText) {
     selectedGif = matchUnusedGif(aiResult.template_name, availableGifs);
     topText = aiResult.topText;
     bottomText = aiResult.bottomText;
-    emotionTag = aiResult.emotion || "🔥 Humor Inteligente";
+    emotionTag = aiResult.emotion || "🔥 Humor Directo";
 
     const signature = `${normalizeText(topText)}_${normalizeText(bottomText)}`;
     if (sessionUsedTextSignatures.has(signature)) {
-      const alt = generateDiverseWittyPunchline(promptText);
+      const alt = generateSimplePunchline(promptText);
       topText = alt.topText;
       bottomText = alt.bottomText;
     }
@@ -249,9 +221,9 @@ export async function queryLLMeme(promptText, customApiKey = null) {
       selectedGif = shuffleArray(availableGifs)[0];
     }
 
-    const witty = generateDiverseWittyPunchline(promptText);
-    topText = witty.topText;
-    bottomText = witty.bottomText;
+    const simple = generateSimplePunchline(promptText);
+    topText = simple.topText;
+    bottomText = simple.bottomText;
   }
 
   sessionUsedGifIds.add(selectedGif.id);
@@ -274,7 +246,7 @@ export async function queryLLMeme(promptText, customApiKey = null) {
       bottomText: bottomText
     },
     confidence: "99.9% Match",
-    source: "🎬 Gemini 2.5 Flash Contest Engine",
+    source: "🎬 Gemini 2.5 Flash Simple Engine",
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   };
 }
