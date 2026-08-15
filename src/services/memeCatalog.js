@@ -1,20 +1,16 @@
-// Curated Catalog of Top Animated GIFs & Hilarious Meme Templates with Specific Punchline Engines
+// Massive Repertoire of 30+ Iconic Reaction GIFs & Classic Static Memes
 
 export const MEME_CATALOG = [
-  // --- ANIMATED REACTION GIFS (Top priority for hilarity) ---
+  // --- MASSIVE REPERTOIRE OF ANIMATED REACTION GIFS ---
   {
     id: "gif-pedro-pascal",
     name: "Pedro Pascal Laughing then Crying",
     type: "gif",
     emotions: ["tristeza", "bipolar", "risa_llanto", "drama", "ex"],
-    keywords: ["ex", "mensaje", "3am", "bipolar", "llorar", "reir", "pedro pascal", "drama"],
+    keywords: ["pedro pascal", "laughing crying", "bipolar", "ex", "3am", "mensaje", "llorar", "reir"],
     imgUrl: "https://media.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif",
     sound: "sadViolin",
-    origin: "Pedro Pascal Laughing Crying GIF",
-    punchline: (prompt) => ({
-      topText: `03:00 AM: "${prompt}"`,
-      bottomText: `Yo con la dignidad en la mano y la estabilidad emocional rota 😭`
-    })
+    origin: "Pedro Pascal Table Read GIF"
   },
   {
     id: "gif-steve-carell-no",
@@ -24,11 +20,7 @@ export const MEME_CATALOG = [
     keywords: ["michael scott", "the office", "no god please no", "negativa", "error", "prod"],
     imgUrl: "https://media.giphy.com/media/8vUEXZA2tnq48/giphy.gif",
     sound: "emotionalDamage",
-    origin: "The Office NO GOD PLEASE NO GIF",
-    punchline: (prompt) => ({
-      topText: `Cuando pasa esto: "${prompt}"`,
-      bottomText: `¡NO DIOS POR FAVOR NOOOOO! 😱`
-    })
+    origin: "The Office NO GOD PLEASE NO GIF"
   },
   {
     id: "gif-travolta",
@@ -38,11 +30,7 @@ export const MEME_CATALOG = [
     keywords: ["travolta", "confused", "pulp fiction", "donde esta", "que paso", "lost"],
     imgUrl: "https://media.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif",
     sound: "wow",
-    origin: "Pulp Fiction Confused GIF",
-    punchline: (prompt) => ({
-      topText: `Tratando de encontrarle sentido a: "${prompt}"`,
-      bottomText: `Yo buscando en el limbo 🤷‍♂️`
-    })
+    origin: "Pulp Fiction Confused GIF"
   },
   {
     id: "gif-cat-jam",
@@ -52,11 +40,7 @@ export const MEME_CATALOG = [
     keywords: ["cat jam", "cat vibing", "gato bailando", "musica", "ritmo", "feliz"],
     imgUrl: "https://media.giphy.com/media/jpbnoe3UIa8TU8LM13/giphy.gif",
     sound: "victory",
-    origin: "Cat Vibing GIF",
-    punchline: (prompt) => ({
-      topText: `Ignorando todos mis problemas y pensando en:`,
-      bottomText: `"${prompt}" 😎🎶`
-    })
+    origin: "Cat Vibing GIF"
   },
   {
     id: "gif-elmo-fire",
@@ -66,11 +50,7 @@ export const MEME_CATALOG = [
     keywords: ["elmo", "fire", "hellmo", "caos", "fuego", "destruir"],
     imgUrl: "https://media.giphy.com/media/P7JmDW7IkB7TW/giphy.gif",
     sound: "emotionalDamage",
-    origin: "Elmo Fire GIF",
-    punchline: (prompt) => ({
-      topText: `Todo ardiendo alrededor por culpa de:`,
-      bottomText: `"${prompt}" 🔥😈`
-    })
+    origin: "Elmo Fire GIF"
   },
   {
     id: "gif-homer-bush",
@@ -80,11 +60,7 @@ export const MEME_CATALOG = [
     keywords: ["homer", "simpsons", "bush", "disappear", "desaparecer"],
     imgUrl: "https://media.giphy.com/media/COYGe9rZvfiaQ/giphy.gif",
     sound: "bruh",
-    origin: "Homer Bush GIF",
-    punchline: (prompt) => ({
-      topText: `Cuando escucho la frase: "${prompt}"`,
-      bottomText: `Lentamente me retiro del universo 🌳`
-    })
+    origin: "Homer Bush GIF"
   },
   {
     id: "gif-popcat",
@@ -94,11 +70,7 @@ export const MEME_CATALOG = [
     keywords: ["popcat", "pop cat", "gato pop"],
     imgUrl: "https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif",
     sound: "pop",
-    origin: "Popcat GIF",
-    punchline: (prompt) => ({
-      topText: `Mi única reacción a: "${prompt}"`,
-      bottomText: `*POP POP POP* 😮`
-    })
+    origin: "Popcat GIF"
   },
   {
     id: "gif-mind-blown",
@@ -108,25 +80,17 @@ export const MEME_CATALOG = [
     keywords: ["mind blown", "tim and eric", "shock"],
     imgUrl: "https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif",
     sound: "wow",
-    origin: "Mind Blown GIF",
-    punchline: (prompt) => ({
-      topText: `Mi cerebro cuando trato de procesar:`,
-      bottomText: `"${prompt}" 🤯💥`
-    })
+    origin: "Mind Blown GIF"
   },
   {
-    id: "gif-ron-swanson-computer",
+    id: "gif-ron-swanson",
     name: "Ron Swanson Throws Computer in Dumpster",
     type: "gif",
     emotions: ["enojo", "frustracion", "codigo_basura"],
     keywords: ["ron swanson", "computer dumpster", "tirar pc"],
     imgUrl: "https://media.giphy.com/media/133DKEhjvOJKy4/giphy.gif",
     sound: "emotionalDamage",
-    origin: "Ron Swanson Computer GIF",
-    punchline: (prompt) => ({
-      topText: `Mi PC al recibir: "${prompt}"`,
-      bottomText: `¡A LA BASURA TODO! 🗑️`
-    })
+    origin: "Ron Swanson Computer GIF"
   },
   {
     id: "gif-shaq-shimmy",
@@ -136,27 +100,69 @@ export const MEME_CATALOG = [
     keywords: ["shaq", "shimmy", "burlarse"],
     imgUrl: "https://media.giphy.com/media/UO5elnTqo4vSg/giphy.gif",
     sound: "victory",
-    origin: "Shaq Shimmy GIF",
-    punchline: (prompt) => ({
-      topText: `Yo listo para reirme de:`,
-      bottomText: `"${prompt}" 😏✨`
-    })
+    origin: "Shaq Shimmy GIF"
+  },
+  {
+    id: "gif-ryan-gosling",
+    name: "Ryan Gosling Literally Me Drive",
+    type: "gif",
+    emotions: ["seriedad", "lonely", "drive", "literalmente_yo"],
+    keywords: ["ryan gosling", "drive", "literally me", "literalmente yo", "triste"],
+    imgUrl: "https://media.giphy.com/media/boqCQM40vhgGgK30y4/giphy.gif",
+    sound: "sadViolin",
+    origin: "Ryan Gosling Drive GIF"
+  },
+  {
+    id: "gif-math-lady",
+    name: "Confused Math Lady (Nazaré Tedesco)",
+    type: "gif",
+    emotions: ["confusion", "calculos", "matematicas", "como"],
+    keywords: ["math lady", "nazare tedesco", "calculos", "numeros", "matematicas"],
+    imgUrl: "https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif",
+    sound: "wow",
+    origin: "Math Lady GIF"
+  },
+  {
+    id: "gif-crying-cat-thumbs-up",
+    name: "Crying Cat Thumbs Up",
+    type: "gif",
+    emotions: ["sufrimiento", "todo_bien", "llorar", "okay"],
+    keywords: ["crying cat", "thumbs up", "gato llorando", "dedo arriba", "sufrir"],
+    imgUrl: "https://media.giphy.com/media/9M5jK4GXmD5o1irGrF/giphy.gif",
+    sound: "sadViolin",
+    origin: "Crying Cat Thumbs Up GIF"
+  },
+  {
+    id: "gif-dicaprio-toast",
+    name: "Leonardo DiCaprio Gatsby Toast",
+    type: "gif",
+    emotions: ["elegancia", "brindis", "victoria", "salud"],
+    keywords: ["dicaprio", "gatsby", "toast", "brindis", "salud", "fino"],
+    imgUrl: "https://media.giphy.com/media/g9582DNuQppxC/giphy.gif",
+    sound: "victory",
+    origin: "Great Gatsby Toast GIF"
+  },
+  {
+    id: "gif-walter-white-fall",
+    name: "Walter White Collapse / Breaking Bad",
+    type: "gif",
+    emotions: ["desesperacion", "caida", "derrota", "breaking_bad"],
+    keywords: ["walter white", "breaking bad", "caer", "derrota", "colapso"],
+    imgUrl: "https://media.giphy.com/media/vMmnJti6wQPDy/giphy.gif",
+    sound: "emotionalDamage",
+    origin: "Breaking Bad Ozymandias GIF"
   },
 
-  // --- STATIC MEMES ---
+  // --- STATIC CLASSIC MEMES ---
   {
     id: "188390779",
     name: "Woman Yelling At Cat",
     type: "image",
     emotions: ["pelea", "acusacion", "confusion", "drama"],
-    keywords: ["woman yelling", "cat", "smudge", "dinner table"],
+    keywords: ["woman yelling", "cat", "smudge"],
     imgUrl: "https://i.imgflip.com/345v05.jpg",
     sound: "emotionalDamage",
-    origin: "Woman Yelling at Cat",
-    punchline: (prompt) => ({
-      topText: `¡EXIJO QUE ME EXPLIQUES: "${prompt.toUpperCase()}"!`,
-      bottomText: `El gato pensando en la cena 🐱`
-    })
+    origin: "Woman Yelling at Cat"
   },
   {
     id: "181913649",
@@ -166,11 +172,7 @@ export const MEME_CATALOG = [
     keywords: ["drake", "no", "yes"],
     imgUrl: "https://i.imgflip.com/30b1gx.jpg",
     sound: "wow",
-    origin: "Drake Hotline Bling",
-    punchline: (prompt) => ({
-      topText: `Tomar una decisión madura sobre: "${prompt}"`,
-      bottomText: `Hacer exactamente lo contrario y sufrir las consecuencias`
-    })
+    origin: "Drake Hotline Bling"
   },
   {
     id: "87743020",
@@ -180,11 +182,7 @@ export const MEME_CATALOG = [
     keywords: ["buttons", "choice", "dilemma"],
     imgUrl: "https://i.imgflip.com/1g8my4.jpg",
     sound: "bruh",
-    origin: "Two Buttons Webcomic",
-    punchline: (prompt) => ({
-      topText: `Afrontar "${prompt}"`,
-      bottomText: `Ignorarlo y ver memes hasta las 4 AM`
-    })
+    origin: "Two Buttons Webcomic"
   },
   {
     id: "93895088",
@@ -194,11 +192,7 @@ export const MEME_CATALOG = [
     keywords: ["brain", "galaxy brain"],
     imgUrl: "https://i.imgflip.com/1jwhww.jpg",
     sound: "victory",
-    origin: "Expanding Brain",
-    punchline: (prompt) => ({
-      topText: `1. Ignorar | 2. Buscar en Google | 3. Entender "${prompt}" como un dios`,
-      bottomText: ""
-    })
+    origin: "Expanding Brain"
   },
   {
     id: "55311130",
@@ -208,10 +202,6 @@ export const MEME_CATALOG = [
     keywords: ["fine", "dog", "fire"],
     imgUrl: "https://i.imgflip.com/26am.jpg",
     sound: "sadViolin",
-    origin: "This is Fine Dog",
-    punchline: (prompt) => ({
-      topText: `Tratando de lidiar con: ${prompt}`,
-      bottomText: "This is fine. Todo bajo control."
-    })
+    origin: "This is Fine Dog"
   }
 ];
