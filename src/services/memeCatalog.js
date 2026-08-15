@@ -1,7 +1,6 @@
-// Massive Repertoire of 30+ Iconic Reaction GIFs & Classic Static Memes
+// Comprehensive Library of 25+ Iconic Animated Reaction GIFs (No Static Images)
 
-export const MEME_CATALOG = [
-  // --- MASSIVE REPERTOIRE OF ANIMATED REACTION GIFS ---
+export const GIF_REPERTOIRE = [
   {
     id: "gif-pedro-pascal",
     name: "Pedro Pascal Laughing then Crying",
@@ -152,56 +151,56 @@ export const MEME_CATALOG = [
     sound: "emotionalDamage",
     origin: "Breaking Bad Ozymandias GIF"
   },
-
-  // --- STATIC CLASSIC MEMES ---
   {
-    id: "188390779",
-    name: "Woman Yelling At Cat",
-    type: "image",
-    emotions: ["pelea", "acusacion", "confusion", "drama"],
-    keywords: ["woman yelling", "cat", "smudge"],
-    imgUrl: "https://i.imgflip.com/345v05.jpg",
-    sound: "emotionalDamage",
-    origin: "Woman Yelling at Cat"
-  },
-  {
-    id: "181913649",
-    name: "Drake Hotline Bling",
-    type: "image",
-    emotions: ["preferencia", "desecho", "decision"],
-    keywords: ["drake", "no", "yes"],
-    imgUrl: "https://i.imgflip.com/30b1gx.jpg",
+    id: "gif-pikachu-surprised",
+    name: "Surprised Pikachu HD Animated",
+    type: "gif",
+    emotions: ["sorpresa", "shock", "obvio"],
+    keywords: ["pikachu", "surprised pikachu", "sorpresa", "quede"],
+    imgUrl: "https://media.giphy.com/media/6nwhy3ulBL7GSCvKw6/giphy.gif",
     sound: "wow",
-    origin: "Drake Hotline Bling"
+    origin: "Surprised Pikachu GIF"
   },
   {
-    id: "87743020",
-    name: "Two Buttons (El Dilema)",
-    type: "image",
-    emotions: ["dilema", "panico", "decision"],
-    keywords: ["buttons", "choice", "dilemma"],
-    imgUrl: "https://i.imgflip.com/1g8my4.jpg",
+    id: "gif-hasbulla-laugh",
+    name: "Hasbulla Evil Laugh",
+    type: "gif",
+    emotions: ["maldad", "risa_malvada", "plan"],
+    keywords: ["hasbulla", "hasbulla laugh", "risa malvada"],
+    imgUrl: "https://media.giphy.com/media/1d5Zn8FqmJqApu4hNU/giphy.gif",
+    sound: "pop",
+    origin: "Hasbulla Laugh GIF"
+  },
+  {
+    id: "gif-spongebob-head-out",
+    name: "I'mma Head Out SpongeBob",
+    type: "gif",
+    emotions: ["me_voy", "escape", "spongebob"],
+    keywords: ["spongebob", "imma head out", "me voy", "silla"],
+    imgUrl: "https://media.giphy.com/media/fDO2Nk0VUfija/giphy.gif",
     sound: "bruh",
-    origin: "Two Buttons Webcomic"
+    origin: "SpongeBob Head Out GIF"
   },
   {
-    id: "93895088",
-    name: "Expanding Brain (Galaxy Brain)",
-    type: "image",
-    emotions: ["iluminacion", "genio", "progreso"],
-    keywords: ["brain", "galaxy brain"],
-    imgUrl: "https://i.imgflip.com/1jwhww.jpg",
-    sound: "victory",
-    origin: "Expanding Brain"
-  },
-  {
-    id: "55311130",
-    name: "This Is Fine Dog",
-    type: "image",
-    emotions: ["panico", "caos", "resignacion"],
-    keywords: ["fine", "dog", "fire"],
-    imgUrl: "https://i.imgflip.com/26am.jpg",
+    id: "gif-mr-bean-waiting",
+    name: "Mr Bean Waiting Bored",
+    type: "gif",
+    emotions: ["espera", "aburrimiento", "mr_bean"],
+    keywords: ["mr bean", "waiting", "esperando", "aburrido"],
+    imgUrl: "https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif",
     sound: "sadViolin",
-    origin: "This is Fine Dog"
+    origin: "Mr Bean Waiting GIF"
+  },
+  {
+    id: "gif-disaster-girl",
+    name: "Disaster Girl Burning House",
+    type: "gif",
+    emotions: ["maldad", "fuego", "caos"],
+    keywords: ["disaster girl", "fire", "fuego", "sonrisa malvada"],
+    imgUrl: "https://media.giphy.com/media/iH7kfwoxKsmgTHvNTg/giphy.gif",
+    sound: "emotionalDamage",
+    origin: "Disaster Girl Fire GIF"
   }
 ];
+
+export const MEME_CATALOG = GIF_REPERTOIRE;

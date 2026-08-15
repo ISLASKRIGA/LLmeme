@@ -4,7 +4,7 @@ import { ChatWindow } from './components/ChatWindow';
 import { MemeEditorModal } from './components/MemeEditorModal';
 import { SoundboardModal } from './components/SoundboardModal';
 import { ApiKeyModal } from './components/ApiKeyModal';
-import { queryLLMeme } from './services/memeEngine';
+import { queryLLMeme, clearSessionMemory } from './services/memeEngine';
 import { memeAudio } from './services/soundEffects';
 
 export function App() {
@@ -28,7 +28,7 @@ export function App() {
       setMessages(prev => [...prev, memeResponse]);
 
       // Play sound
-      const firstSound = memeResponse.options?.[0]?.sound || 'wow';
+      const firstSound = memeResponse.meme?.sound || 'wow';
       if (firstSound === 'bruh') memeAudio.playBruh();
       else if (firstSound === 'airhorn') memeAudio.playAirhorn();
       else if (firstSound === 'sadViolin') memeAudio.playSadViolin();
@@ -47,9 +47,7 @@ export function App() {
   const handleRegenerateMemes = async (targetMsg) => {
     setIsLoading(true);
     try {
-      const existingIds = targetMsg.options ? targetMsg.options.map(o => o.memeId) : [];
-      const newResponse = await queryLLMeme(targetMsg.prompt, apiKey, existingIds);
-
+      const newResponse = await queryLLMeme(targetMsg.prompt, apiKey);
       setMessages(prev => prev.map(m => m.id === targetMsg.id ? newResponse : m));
       memeAudio.playVictory();
     } catch (err) {
@@ -61,6 +59,7 @@ export function App() {
 
   const handleClearChat = () => {
     setMessages([]);
+    clearSessionMemory();
     memeAudio.playPop();
   };
 

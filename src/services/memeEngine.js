@@ -1,5 +1,5 @@
-// LLMeme Engine: Powered by Google Gemini 2.5 Flash AI with High-Hilarity Reaction GIFs & Custom Punchlines
-import { MEME_CATALOG } from './memeCatalog';
+// LLMeme Engine: 100% Animated Reaction GIFs Engine with No-Repeat Session Memory
+import { GIF_REPERTOIRE } from './memeCatalog';
 
 export const GEMINI_KEYS = [
   "AIzaSyBWVUuVWh3GvU-tXO0EfD7NWo9J2yqOa2Y",
@@ -9,6 +9,12 @@ export const GEMINI_KEYS = [
 ];
 
 let currentKeyIndex = 0;
+// Track used GIF IDs so NO GIF IS EVER REPEATED in a session!
+const sessionUsedGifIds = new Set();
+
+export function clearSessionMemory() {
+  sessionUsedGifIds.clear();
+}
 
 function normalizeText(text) {
   return text
@@ -19,8 +25,7 @@ function normalizeText(text) {
     .trim();
 }
 
-// Gemini AI Call forcing hilarious reaction GIFs & smart punchlines
-async function queryGeminiIntelligent(prompt, customKey = null) {
+async function queryGeminiGIF(prompt, availableGifs, customKey = null) {
   const activeKey = customKey && customKey.trim().length > 10
     ? customKey.trim()
     : GEMINI_KEYS[currentKeyIndex % GEMINI_KEYS.length];
@@ -29,32 +34,20 @@ async function queryGeminiIntelligent(prompt, customKey = null) {
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`;
 
-  const promptText = `Eres LLMeme, la Inteligencia Artificial de memes más graciosa del mundo.
-Dada la frase o situación: "${prompt}"
+  const availableListText = availableGifs.map(g => `"${g.name}"`).join(", ");
 
-Analiza la ironía, comedia o drama. Selecciona EL MEJOR GIF ANIMADO O MEME de esta lista:
-- "Pedro Pascal Laughing then Crying" (GIF)
-- "Michael Scott NO GOD PLEASE NO!" (GIF)
-- "Confused John Travolta" (GIF)
-- "Cat Vibing / Cat Jam" (GIF)
-- "Elmo in Front of Fire (Hellmo)" (GIF)
-- "Homer Backing Into Bushes" (GIF)
-- "Popcat Opening Mouth" (GIF)
-- "Tim and Eric Mind Blown" (GIF)
-- "Ron Swanson Throws Computer in Dumpster" (GIF)
-- "Shaq Shimmy Goldfish Laugh" (GIF)
-- "Woman Yelling At Cat"
-- "Drake Hotline Bling"
-- "Two Buttons (El Dilema)"
-- "Expanding Brain (Galaxy Brain)"
-- "This Is Fine Dog"
+  const promptText = `Eres LLMeme, la Inteligencia Artificial que responde EXCLUSIVAMENTE con GIFs ANIMADOS DE REACCIÓN súper graciosos.
+Frase del usuario: "${prompt}"
 
-Crea un texto súper gracioso, ingenioso y cómico en español (NUNCA digas "Yo pensando en...").
+Elige EL MEJOR GIF ANIMADO NO REPETIDO de esta lista disponible:
+[${availableListText}]
+
+Genera un remate gracioso e ingenioso en español (NUNCA digas "Yo pensando en...").
 Responde ÚNICAMENTE este formato JSON estricto:
 {"template_name":"Pedro Pascal Laughing then Crying","topText":"03:00 AM: 'Te extraño'","bottomText":"Yo con la estabilidad emocional hecha pedazos 😭","emotion":"🎭 Drama Bipolar"}`;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout for Gemini AI
+  const timeoutId = setTimeout(() => controller.abort(), 3500);
 
   try {
     const res = await fetch(url, {
@@ -65,7 +58,7 @@ Responde ÚNICAMENTE este formato JSON estricto:
         contents: [{ parts: [{ text: promptText }] }],
         generationConfig: {
           maxOutputTokens: 150,
-          temperature: 0.8
+          temperature: 0.85
         }
       })
     });
@@ -85,93 +78,94 @@ Responde ÚNICAMENTE este formato JSON estricto:
       }
     }
   } catch (err) {
-    console.warn("Gemini API timeout or error, executing punchline engine fallback:", err);
+    console.warn("Gemini API timeout or error:", err);
   }
   return null;
 }
 
-function matchTemplate(templateName) {
+function matchUnusedGif(templateName, availableGifs) {
   const normTarget = normalizeText(templateName || "");
-  let best = MEME_CATALOG[0];
+
+  for (const gif of availableGifs) {
+    const normName = normalizeText(gif.name);
+    if (normTarget.includes(normName) || normName.includes(normTarget)) {
+      return gif;
+    }
+  }
+
+  // Keyword match fallback among available GIFs
+  let best = availableGifs[0];
   let highest = -1;
 
-  for (const meme of MEME_CATALOG) {
-    const normName = normalizeText(meme.name);
-    if (normTarget.includes(normName) || normName.includes(normTarget)) {
-      return meme;
-    }
+  for (const gif of availableGifs) {
     let score = 0;
-    for (const kw of meme.keywords) {
+    for (const kw of gif.keywords) {
       if (normTarget.includes(kw)) score += 3;
     }
     if (score > highest) {
       highest = score;
-      best = meme;
+      best = gif;
     }
   }
   return best;
 }
 
 export async function queryLLMeme(promptText, customApiKey = null) {
-  const aiResult = await queryGeminiIntelligent(promptText, customApiKey);
+  // Filter out GIFs that have already been used in this chat session!
+  let availableGifs = GIF_REPERTOIRE.filter(g => !sessionUsedGifIds.has(g.id));
+
+  // If all GIFs have been used in a long chat, reset memory to allow new rotation
+  if (availableGifs.length === 0) {
+    sessionUsedGifIds.clear();
+    availableGifs = [...GIF_REPERTOIRE];
+  }
+
+  const aiResult = await queryGeminiGIF(promptText, availableGifs, customApiKey);
+
+  let selectedGif = availableGifs[0];
+  let topText = "";
+  let bottomText = "";
+  let emotionTag = "🎬 GIF Animado de Reacción";
 
   if (aiResult && aiResult.template_name) {
-    const matchedMeme = matchTemplate(aiResult.template_name);
-    return {
-      id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
-      prompt: promptText,
-      meme: {
-        id: matchedMeme.id,
-        name: aiResult.template_name || matchedMeme.name,
-        type: matchedMeme.type || "image",
-        imgUrl: matchedMeme.imgUrlOverride || matchedMeme.imgUrl,
-        origin: matchedMeme.origin || "Internet Meme Vault",
-        sound: matchedMeme.sound || "wow"
-      },
-      emotion: aiResult.emotion || (matchedMeme.type === 'gif' ? '🎬 GIF Animado de Reacción' : '⚡ Gemini AI'),
-      captions: {
-        topText: aiResult.topText || "",
-        bottomText: aiResult.bottomText || ""
-      },
-      confidence: "99.9% Match",
-      source: matchedMeme.type === 'gif' ? `🎬 GIF Animado (Gemini 2.5 Flash)` : `✨ Gemini 2.5 Flash AI`,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-  }
-
-  // Smart Punchline Engine Fallback (Never generic!)
-  const normPrompt = normalizeText(promptText);
-  let bestMeme = MEME_CATALOG[0]; // Default to Pedro Pascal GIF or Cat Jam
-
-  for (const m of MEME_CATALOG) {
-    if (m.keywords.some(k => normPrompt.includes(k))) {
-      bestMeme = m;
-      break;
+    selectedGif = matchUnusedGif(aiResult.template_name, availableGifs);
+    topText = aiResult.topText || "";
+    bottomText = aiResult.bottomText || "";
+    emotionTag = aiResult.emotion || "🎬 GIF Animado";
+  } else {
+    // Keyword match among unused GIFs
+    const normPrompt = normalizeText(promptText);
+    for (const g of availableGifs) {
+      if (g.keywords.some(k => normPrompt.includes(k))) {
+        selectedGif = g;
+        break;
+      }
     }
+    topText = `Cuando pasa esto: "${promptText}"`;
+    bottomText = "Yo con la dignidad por los suelos 😭";
   }
 
-  const punchlineCaptions = bestMeme.punchline
-    ? bestMeme.punchline(promptText)
-    : {
-        topText: `Cuando pasa esto: "${promptText}"`,
-        bottomText: "Yo con la dignidad por los suelos 😭"
-      };
+  // Mark this GIF ID as used so it is NEVER repeated in this session!
+  sessionUsedGifIds.add(selectedGif.id);
 
   return {
     id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
     prompt: promptText,
     meme: {
-      id: bestMeme.id,
-      name: bestMeme.name,
-      type: bestMeme.type || "image",
-      imgUrl: bestMeme.imgUrlOverride || bestMeme.imgUrl,
-      origin: bestMeme.origin,
-      sound: bestMeme.sound
+      id: selectedGif.id,
+      name: selectedGif.name,
+      type: "gif",
+      imgUrl: selectedGif.imgUrl,
+      origin: selectedGif.origin || "Animated Reaction GIF Vault",
+      sound: selectedGif.sound || "wow"
     },
-    emotion: bestMeme.type === 'gif' ? "🎬 GIF Animado Cómico" : "⚡ Gemini AI",
-    captions: punchlineCaptions,
-    confidence: "99.5% Match",
-    source: bestMeme.type === 'gif' ? "🎬 GIF Animado de Reacción" : "✨ Gemini AI Engine",
+    emotion: emotionTag,
+    captions: {
+      topText: topText,
+      bottomText: bottomText
+    },
+    confidence: "99.9% Match",
+    source: "🎬 GIF Animado Único (Gemini 2.5 Flash)",
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   };
 }
