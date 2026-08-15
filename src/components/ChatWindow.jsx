@@ -7,15 +7,11 @@ export function ChatWindow({ messages, isLoading, onSendMessage, onClearChat, on
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef(null);
 
-  const HILARIOUS_PROMPTS = [
+  // Strictly 3 Top Hilarious Meme Prompts
+  const TOP_3_HILARIOUS_PROMPTS = [
     '🤡 "Mi ex me puso: \'Te extraño, ¿estás despierto?\' a las 3 AM"',
-    '🔥 "El cliente: \'Es un cambio súper pequeñito, no te toma ni 5 min\'"',
     '😱 "Se cayó producción un Viernes a las 4:59 PM y el Senior apagó el celular"',
-    '💀 "Llevo 4 horas debuggeando el código y el error era un punto y coma"',
-    '💸 "Gané 10 dólares en Cripto y ya me siento el Lobo de Wall Street"',
-    '🧠 "Mi mamá: \'Explícame qué es la Nube pero sin usar términos raros\'"',
-    '🥴 "El jefe: \'No hay presupuesto para aumentos pero les traje pizza 🍕\'"',
-    '⚡ "El código compiló a la primera sin ningún warning ni error"'
+    '🔥 "El cliente: \'Es un cambio súper pequeñito, no te toma ni 5 min\'"'
   ];
 
   const scrollToBottom = () => {
@@ -97,13 +93,13 @@ export function ChatWindow({ messages, isLoading, onSendMessage, onClearChat, on
               Impulsado por Google Gemini 2.5 Flash + Web Audio SFX
             </p>
 
-            {/* Hilarious Prompt Chips */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', maxWidth: '800px' }}>
-              {HILARIOUS_PROMPTS.map((prompt, idx) => (
+            {/* Top 3 Hilarious Prompt Chips */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', maxWidth: '750px' }}>
+              {TOP_3_HILARIOUS_PROMPTS.map((prompt, idx) => (
                 <button
                   key={idx}
                   className="neo-btn"
-                  style={{ background: '#fff', fontSize: '12px', textTransform: 'none', padding: '10px 14px' }}
+                  style={{ background: '#fff', fontSize: '12px', textTransform: 'none', padding: '12px 18px' }}
                   onClick={() => {
                     const cleanText = prompt.replace(/^.*?"/, '').replace(/"$/, '');
                     memeAudio.playPop();
