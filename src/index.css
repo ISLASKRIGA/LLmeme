@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&display=swap');
+
+:root {
+  --bg-yellow: #ffe600;
+  --bg-white: #ffffff;
+  --color-black: #000000;
+  --color-cyan: #00e5ff;
+  --color-pink: #ff007f;
+  --color-purple: #9d4edd;
+  --color-green: #00ff80;
+  --border-thick: 3px solid #000000;
+  --shadow-hard: 4px 4px 0px #000000;
+  --shadow-hard-lg: 6px 6px 0px #000000;
+  --font-main: 'Outfit', 'Impact', sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-yellow);
+  color: var(--color-black);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-yellow);
+}
+::-webkit-scrollbar-thumb {
+  background: #000000;
+  border: 2px solid var(--bg-yellow);
+}
+
+/* Neubrutalist Box Utility */
+.neo-box {
+  background: var(--bg-white);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  border-radius: 6px;
+  color: #000;
+}
+
+.neo-box-cyan {
+  background: var(--color-cyan);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  border-radius: 6px;
+  color: #000;
+}
+
+.neo-box-pink {
+  background: var(--color-pink);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  border-radius: 6px;
+  color: #fff;
+}
+
+.neo-box-yellow {
+  background: var(--bg-yellow);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  border-radius: 6px;
+  color: #000;
+}
+
+/* Neubrutalist Button */
+.neo-btn {
+  background: var(--bg-white);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  border-radius: 6px;
+  color: #000;
+  font-family: var(--font-main);
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.1s ease;
+}
+
+.neo-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000;
+}
+
+.neo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000;
+}
+
+.neo-btn-cyan {
+  background: var(--color-cyan);
+  color: #000;
+}
+
+.neo-btn-pink {
+  background: var(--color-pink);
+  color: #fff;
+}
+
+.neo-btn-yellow {
+  background: var(--bg-yellow);
+  color: #000;
+}
+
+/* Meme Impact Font */
+.meme-impact-text {
+  font-family: 'Impact', 'Outfit', sans-serif;
+  text-transform: uppercase;
+  color: white;
+  text-shadow: 
+    -2px -2px 0 #000,  
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000,
+     0px  3px 5px rgba(0,0,0,0.8);
+  letter-spacing: 1px;
+}
+
+/* Input Bar Neubrutalist */
+.neo-input {
+  background: #ffffff;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  border-radius: 6px;
+  padding: 12px 18px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: #000;
+  outline: none;
+  width: 100%;
+}
+
+.neo-input::placeholder {
+  color: #777;
+}
+
+/* Keyframes pulse */
+@keyframes neoPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
