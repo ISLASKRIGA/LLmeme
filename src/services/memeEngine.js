@@ -1,5 +1,5 @@
-// LLMeme Engine: 100% Reliable Classic Meme Images Engine (Zero Broken Links)
-import { MEME_CATALOG } from './memeCatalog';
+// LLMeme Engine: 100% Pure Animated Reaction GIFs (No Text Overlay Clutter)
+import { GIF_REPERTOIRE } from './memeCatalog';
 
 export const GEMINI_KEYS = [
   "AIzaSyBWVUuVWh3GvU-tXO0EfD7NWo9J2yqOa2Y",
@@ -9,13 +9,10 @@ export const GEMINI_KEYS = [
 ];
 
 let currentKeyIndex = 0;
-
-const sessionUsedMemeIds = new Set();
-const sessionUsedTextSignatures = new Set();
+const sessionUsedGifIds = new Set();
 
 export function clearSessionMemory() {
-  sessionUsedMemeIds.clear();
-  sessionUsedTextSignatures.clear();
+  sessionUsedGifIds.clear();
 }
 
 function normalizeText(text) {
@@ -42,7 +39,7 @@ function parseJsonResponse(rawText) {
     const match = rawText.match(/\{[\s\S]*\}/);
     if (match) {
       const parsed = JSON.parse(match[0]);
-      if (parsed && parsed.template_name && parsed.topText !== undefined && parsed.bottomText !== undefined) return parsed;
+      if (parsed && parsed.template_name) return parsed;
     }
   } catch (e) {
     console.warn("JSON parse error:", e);
@@ -50,32 +47,25 @@ function parseJsonResponse(rawText) {
   return null;
 }
 
-// Gemini API Query selecting from High-Definition Meme Images
-async function queryGeminiMemeImage(prompt, availableMemes, customKey = null) {
+// Gemini AI chooses the BEST Animated Reaction GIF for the situation
+async function queryGeminiPureGIF(prompt, availableGifs, customKey = null) {
   const keysToTry = customKey && customKey.trim().length > 10
     ? [customKey.trim(), ...GEMINI_KEYS]
     : GEMINI_KEYS;
 
-  const shuffledAvailable = shuffleArray(availableMemes);
-  const availableNamesList = shuffledAvailable.map(m => `"${m.name}"`).join(", ");
+  const shuffledAvailable = shuffleArray(availableGifs);
+  const availableNamesList = shuffledAvailable.map(g => `"${g.name}"`).join(", ");
 
-  const promptText = `Eres el Maestro Supremo de los Memes de Imagen. Tu tarea es responder a esta frase con la MEJOR PLANTILLA DE MEME Y REMATE SENCILLO en español:
+  const promptText = `Eres LLMeme. Tu única tarea es responder a esta frase eligiendo EL GIF ANIMADO DE REACCIÓN MÁS DIVERTIDO Y PERFECTO:
 
 Frase del usuario: "${prompt}"
 
-REGLAS DE ORO (MEMES SENCILLOS DE IMAGEN):
-1. Elige EXACTAMENTE UNO de estos Memes de Imagen disponibles: [${availableNamesList}].
-2. El topText debe ser SENCILLO Y CORTO (MÁXIMO 3 A 5 PALABRAS).
-3. El bottomText debe ser EL REMATE DIRECTO (MÁXIMO 3 A 5 PALABRAS).
-4. CERO textos largos. CERO frases tristes o cliché de "dignidad". Directo al grano.
-5. La etiqueta "emotion" es una actitud corta con emoji (ej: "😎 Sarcasmo Puro", "🔥 Respuesta Salvaje", "🏆 Modo Leyenda").
+Elige EXACTAMENTE UNO de estos GIFs disponibles: [${availableNamesList}].
 
 Responde ÚNICAMENTE en JSON:
 {
-  "template_name": "Nombre exacto del meme elegido de la lista",
-  "topText": "Texto superior corto (3-5 palabras)",
-  "bottomText": "Remate directo (3-5 palabras)",
-  "emotion": "😎 Actitud Corta"
+  "template_name": "Nombre exacto del GIF elegido de la lista",
+  "emotion": "🎭 Reacción Cómica Corta con Emoji"
 }`;
 
   const startIndex = currentKeyIndex;
@@ -97,9 +87,8 @@ Responde ÚNICAMENTE en JSON:
         body: JSON.stringify({
           contents: [{ parts: [{ text: promptText }] }],
           generationConfig: {
-            maxOutputTokens: 180,
-            temperature: 0.9,
-            topP: 0.9
+            maxOutputTokens: 100,
+            temperature: 0.9
           }
         })
       });
@@ -119,129 +108,88 @@ Responde ÚNICAMENTE en JSON:
   return null;
 }
 
-function matchUnusedMeme(templateName, availableMemes) {
+function matchUnusedGif(templateName, availableGifs) {
   const normTarget = normalizeText(templateName || "");
 
-  for (const meme of availableMemes) {
-    const normName = normalizeText(meme.name);
+  for (const gif of availableGifs) {
+    const normName = normalizeText(gif.name);
     if (normTarget.includes(normName) || normName.includes(normTarget)) {
-      return meme;
+      return gif;
     }
   }
 
-  let bestMemes = [];
+  let bestGifs = [];
   let highestScore = -1;
 
-  for (const meme of availableMemes) {
+  for (const gif of availableGifs) {
     let score = 0;
-    for (const kw of meme.keywords) {
+    for (const kw of gif.keywords) {
       if (normTarget.includes(kw)) score += 3;
     }
     if (score > highestScore) {
       highestScore = score;
-      bestMemes = [meme];
+      bestGifs = [gif];
     } else if (score === highestScore && score > 0) {
-      bestMemes.push(meme);
+      bestGifs.push(gif);
     }
   }
 
-  if (bestMemes.length > 0) {
-    return bestMemes[Math.floor(Math.random() * bestMemes.length)];
+  if (bestGifs.length > 0) {
+    return bestGifs[Math.floor(Math.random() * bestGifs.length)];
   }
 
-  return shuffleArray(availableMemes)[0];
-}
-
-// Dynamic Short Punchline Generator (Strictly 2-5 words!)
-function generateSimpleMemePunchline(promptText) {
-  const cleanPrompt = promptText.trim();
-  const words = cleanPrompt.split(/\s+/);
-  const shortHead = words.slice(0, Math.min(3, words.length)).join(" ");
-
-  const simpleOptions = [
-    { top: `Frente a: "${shortHead}"`, bottom: "Modo leyenda activado 😎" },
-    { top: `Cuando dicen: "${shortHead}"`, bottom: "Procedo a cobrar extra 💸" },
-    { top: `Situación: "${shortHead}"`, bottom: "Cero dudas, 100% estilo 🔥" },
-    { top: `Escuchando: "${shortHead}"`, bottom: "Respuesta salvaje activada 😏" },
-    { top: `Planteando: "${shortHead}"`, bottom: "Resultado: Éxito total 🏆" }
-  ];
-
-  let chosen = simpleOptions[Math.floor(Math.random() * simpleOptions.length)];
-  let signature = `${normalizeText(chosen.top)}_${normalizeText(chosen.bottom)}`;
-  let attempts = 0;
-
-  while (sessionUsedTextSignatures.has(signature) && attempts < 10) {
-    chosen = simpleOptions[Math.floor(Math.random() * simpleOptions.length)];
-    signature = `${normalizeText(chosen.top)}_${normalizeText(chosen.bottom)}`;
-    attempts++;
-  }
-
-  return { topText: chosen.top, bottomText: chosen.bottom };
+  return shuffleArray(availableGifs)[0];
 }
 
 export async function queryLLMeme(promptText, customApiKey = null) {
-  let availableMemes = MEME_CATALOG.filter(m => !sessionUsedMemeIds.has(m.id));
+  let availableGifs = GIF_REPERTOIRE.filter(g => !sessionUsedGifIds.has(g.id));
 
-  if (availableMemes.length === 0) {
-    sessionUsedMemeIds.clear();
-    availableMemes = [...MEME_CATALOG];
+  if (availableGifs.length === 0) {
+    sessionUsedGifIds.clear();
+    availableGifs = [...GIF_REPERTOIRE];
   }
 
-  const aiResult = await queryGeminiMemeImage(promptText, availableMemes, customApiKey);
+  const aiResult = await queryGeminiPureGIF(promptText, availableGifs, customApiKey);
 
-  let selectedMeme = shuffleArray(availableMemes)[0];
-  let topText = "";
-  let bottomText = "";
-  let emotionTag = "😎 Meme de Imagen";
+  let selectedGif = shuffleArray(availableGifs)[0];
+  let emotionTag = "🎭 Reacción Cómica";
 
-  if (aiResult && aiResult.template_name && aiResult.topText !== undefined && aiResult.bottomText !== undefined) {
-    selectedMeme = matchUnusedMeme(aiResult.template_name, availableMemes);
-    topText = aiResult.topText;
-    bottomText = aiResult.bottomText;
-    emotionTag = aiResult.emotion || "🔥 Meme Directo";
-
-    const signature = `${normalizeText(topText)}_${normalizeText(bottomText)}`;
-    if (sessionUsedTextSignatures.has(signature)) {
-      const alt = generateSimpleMemePunchline(promptText);
-      topText = alt.topText;
-      bottomText = alt.bottomText;
-    }
+  if (aiResult && aiResult.template_name) {
+    selectedGif = matchUnusedGif(aiResult.template_name, availableGifs);
+    emotionTag = aiResult.emotion || selectedGif.emotions?.[0] || "🎭 GIF Animado";
   } else {
     const normPrompt = normalizeText(promptText);
-    const matchingMemes = availableMemes.filter(m => m.keywords.some(k => normPrompt.includes(k)));
+    const matchingGifs = availableGifs.filter(g => g.keywords.some(k => normPrompt.includes(k)));
 
-    if (matchingMemes.length > 0) {
-      selectedMeme = shuffleArray(matchingMemes)[0];
+    if (matchingGifs.length > 0) {
+      selectedGif = shuffleArray(matchingGifs)[0];
     } else {
-      selectedMeme = shuffleArray(availableMemes)[0];
+      selectedGif = shuffleArray(availableGifs)[0];
     }
-
-    const simple = generateSimpleMemePunchline(promptText);
-    topText = simple.topText;
-    bottomText = simple.bottomText;
+    emotionTag = selectedGif.emotions?.[0] || "🎬 GIF Cómico";
   }
 
-  sessionUsedMemeIds.add(selectedMeme.id);
-  sessionUsedTextSignatures.add(`${normalizeText(topText)}_${normalizeText(bottomText)}`);
+  sessionUsedGifIds.add(selectedGif.id);
 
   return {
     id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
     prompt: promptText,
     meme: {
-      id: selectedMeme.id,
-      name: selectedMeme.name,
-      type: "image",
-      imgUrl: selectedMeme.imgUrl,
-      origin: selectedMeme.origin || "Classic Meme Image Vault",
-      sound: selectedMeme.sound || "wow"
+      id: selectedGif.id,
+      name: selectedGif.name,
+      type: "gif",
+      imgUrl: selectedGif.imgUrl,
+      origin: selectedGif.origin || "Pure Reaction GIF Vault",
+      sound: selectedGif.sound || "wow"
     },
     emotion: emotionTag,
+    // ZERO overlay text captions as requested! Pure GIF response!
     captions: {
-      topText: topText,
-      bottomText: bottomText
+      topText: "",
+      bottomText: ""
     },
     confidence: "99.9% Match",
-    source: "✨ Gemini 2.5 Flash Meme Engine",
+    source: "🎬 Gemini 2.5 Flash Pure GIF Engine",
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   };
 }
