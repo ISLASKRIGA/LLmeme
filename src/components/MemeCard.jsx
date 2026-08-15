@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Volume2, Edit3, Copy, Check, Film } from 'lucide-react';
+import { Volume2, Edit3, Copy, Check, Sparkles } from 'lucide-react';
 import { memeAudio } from '../services/soundEffects';
 
 export function MemeCard({ msg, onEditMeme }) {
@@ -7,9 +7,8 @@ export function MemeCard({ msg, onEditMeme }) {
   const [imgError, setImgError] = useState(false);
 
   const meme = msg.meme || {};
-
-  const primaryImgUrl = meme.imgUrl || "https://i.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif";
-  const fallbackImgUrl = "https://i.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif";
+  const primaryImgUrl = meme.imgUrl || "https://i.imgflip.com/30b1gx.jpg";
+  const fallbackImgUrl = "https://i.imgflip.com/30b1gx.jpg";
 
   const handlePlaySound = () => {
     const soundType = meme.sound || 'wow';
@@ -22,7 +21,7 @@ export function MemeCard({ msg, onEditMeme }) {
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(primaryImgUrl);
+    navigator.clipboard.writeText(imgError ? fallbackImgUrl : primaryImgUrl);
     setCopied(true);
     memeAudio.playPop();
     setTimeout(() => setCopied(false), 2000);
@@ -46,8 +45,8 @@ export function MemeCard({ msg, onEditMeme }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{
-            background: meme.type === 'gif' ? 'var(--color-pink)' : 'var(--color-cyan)',
-            color: meme.type === 'gif' ? '#fff' : '#000',
+            background: 'var(--color-cyan)',
+            color: '#000',
             border: '2px solid #000',
             fontWeight: '900',
             fontSize: '11px',
@@ -58,7 +57,7 @@ export function MemeCard({ msg, onEditMeme }) {
             alignItems: 'center',
             gap: '4px'
           }}>
-            {meme.type === 'gif' && <Film size={12} />}
+            <Sparkles size={12} />
             {msg.emotion || '✨ Gemini AI'}
           </span>
           <span style={{ fontSize: '11px', fontWeight: '800', fontFamily: 'var(--font-mono)' }}>
@@ -79,7 +78,7 @@ export function MemeCard({ msg, onEditMeme }) {
         </span>
       </div>
 
-      {/* Pure GIF / Meme Image Container (Zero Bottom Text Overlay Allowed) */}
+      {/* 100% Unblockable Meme Image Container */}
       <div style={{
         position: 'relative',
         minHeight: '300px',
@@ -96,9 +95,9 @@ export function MemeCard({ msg, onEditMeme }) {
           alt={meme.name}
           referrerPolicy="no-referrer"
           crossOrigin="anonymous"
-          onError={(e) => {
-            console.warn("Meme asset failed to load, switching fallback:", primaryImgUrl);
-            if (!imgError) setImgError(true);
+          onError={() => {
+            console.warn("Asset load interceptor active -> switching to fallback");
+            setImgError(true);
           }}
           style={{
             width: '100%',
