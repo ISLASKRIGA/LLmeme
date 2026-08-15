@@ -48,24 +48,32 @@ async function queryGeminiGIF(prompt, availableGifs, customKey = null) {
   const shuffledAvailable = shuffleArray(availableGifs);
   const availableNamesList = shuffledAvailable.map(g => `"${g.name}"`).join(", ");
 
-  const promptText = `Eres LLMeme, un modelo de lenguaje cómico diseñado para GANAR UN CONCURSO MUNDIAL DE MEMES.
-Tu objetivo es responder a la frase del usuario con el GIF ANIMADO DE REACCIÓN más gracioso, irónico y brillante posible.
+  const promptText = `Eres LLMeme, el modelo de IA más cómico del mundo. Tu misión es GANAR EL CONCURSO MUNDIAL DE MEMES respondiendo con el GIF y los textos MÁS GRACIOSOS POSIBLES en español latino.
 
 Frase del usuario: "${prompt}"
 
-Instrucciones estrictas:
-1. Elige EXACTAMENTE UNO de estos GIFs disponibles: [${availableNamesList}].
-2. Crea un remate cómico en español (NUNCA uses frases genéricas como "Yo pensando en..."). Hazlo picante, chistoso, cotidiano o sarcástico.
-3. Responde ÚNICAMENTE un objeto JSON válido con este formato:
+REGLAS DE ORO PARA SER GRACIOSO:
+1. Elige EXACTAMENTE UNO de estos GIFs disponibles que mejor encaje: [${availableNamesList}].
+2. El topText debe ser SETUP CÓMICO ultra específico y cotidiano (máx 8 palabras).
+3. El bottomText debe ser el REMATE que destruya al usuario de risa (máx 10 palabras). Usa jerga latina, sarcasmo brutal o la verdad incómoda.
+4. PROHIBIDO usar: "Yo pensando en...", "Cuando...", frases genéricas. Sé ESPECÍFICO y ORIGINAL.
+5. La etiqueta "emotion" es una reacción cómica de 3-4 palabras con emoji.
+
+Ejemplos de textos BUENOS (copiar este estilo):
+- topText: "Mi mamá viendo mis calificaciones:" / bottomText: "Dios, dame paciencia antes de que yo le dé algo a ella 😤"
+- topText: "El cliente a las 5pm del viernes:" / bottomText: "'¿Queda tiempo para un cambiecito?' NO. NUNCA. JAMÁS."
+- topText: "Yo pagando Netflix:" / bottomText: "Para ver el mismo capítulo de Brooklyn 99 por 400va vez"
+
+Responde ÚNICAMENTE un objeto JSON válido:
 {
-  "template_name": "Nombre exacto del GIF elegido de la lista",
-  "topText": "Texto superior gracioso",
-  "bottomText": "Texto inferior épico",
-  "emotion": "🎭 Etiqueta Cómica Única"
+  "template_name": "Nombre exacto del GIF elegido",
+  "topText": "Texto superior gracioso y específico",
+  "bottomText": "Remate épico que destruya de risa",
+  "emotion": "🎭 Etiqueta Cómica"
 }`;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
 
   try {
     const res = await fetch(url, {
@@ -172,17 +180,20 @@ export async function queryLLMeme(promptText, customApiKey = null) {
     }
 
     if (normPrompt.includes("ex") || normPrompt.includes("3am") || normPrompt.includes("mensaje")) {
-      topText = `03:00 AM: "${promptText}"`;
-      bottomText = "Yo con la dignidad en la mano y la estabilidad emocional rota 😭";
+      topText = `03:00 AM en mi celular:`;
+      bottomText = `"${promptText.slice(0, 40)}" — mi autoestima abandonando el chat 💀`;
     } else if (normPrompt.includes("viernes") || normPrompt.includes("produccion") || normPrompt.includes("senior")) {
-      topText = `Viernes 4:59 PM: "${promptText}"`;
-      bottomText = "El Senior en su casa con el celular en modo avión ✈️💀";
+      topText = `Viernes 4:59 PM — caída en producción:`;
+      bottomText = "El Senior: apagó el celular, se fue al mar, no existe 🏖️💀";
     } else if (normPrompt.includes("cliente") || normPrompt.includes("5 min") || normPrompt.includes("cambio")) {
-      topText = `"Sólo es un cambio pequeñito de 5 minutos..."`;
-      bottomText = "Proceeds to romperse todo el proyecto entero 🔥🔥";
+      topText = `"Solo es un cambiecito rápido, ¿verdad?"`;
+      bottomText = "3 horas después, el servidor llorando en una esquina 🔥👁️";
+    } else if (normPrompt.includes("lunes") || normPrompt.includes("trabajo") || normPrompt.includes("jefe")) {
+      topText = `El jefe: "¿Cómo vas con eso?"`;
+      bottomText = `Yo: "${promptText.slice(0, 35)}..." — totalmente bien, todo normal 😅`;
     } else {
-      topText = `Cuando pasa esto: "${promptText}"`;
-      bottomText = "Yo procesando la situación con la mente destruida 🤯";
+      topText = `Situación: "${promptText.slice(0, 35)}..."`;
+      bottomText = "Mi cerebro procesando esto a las 2AM como si importara 🤯💀";
     }
   }
 
