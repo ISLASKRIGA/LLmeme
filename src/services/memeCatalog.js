@@ -1,4 +1,4 @@
-// Comprehensive Library of 25+ Iconic Animated Reaction GIFs (No Static Images)
+// Contest-Winning Library of 30+ Viral Reaction GIFs
 
 export const GIF_REPERTOIRE = [
   {
@@ -6,7 +6,7 @@ export const GIF_REPERTOIRE = [
     name: "Pedro Pascal Laughing then Crying",
     type: "gif",
     emotions: ["tristeza", "bipolar", "risa_llanto", "drama", "ex"],
-    keywords: ["pedro pascal", "laughing crying", "bipolar", "ex", "3am", "mensaje", "llorar", "reir"],
+    keywords: ["pedro pascal", "ex", "3am", "mensaje", "llorar", "reir", "drama"],
     imgUrl: "https://media.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif",
     sound: "sadViolin",
     origin: "Pedro Pascal Table Read GIF"
@@ -16,7 +16,7 @@ export const GIF_REPERTOIRE = [
     name: "Michael Scott NO GOD PLEASE NO!",
     type: "gif",
     emotions: ["panico", "rechazo", "nooo", "desesperacion"],
-    keywords: ["michael scott", "the office", "no god please no", "negativa", "error", "prod"],
+    keywords: ["michael scott", "the office", "no god please no", "negativa", "error", "prod", "viernes"],
     imgUrl: "https://media.giphy.com/media/8vUEXZA2tnq48/giphy.gif",
     sound: "emotionalDamage",
     origin: "The Office NO GOD PLEASE NO GIF"
@@ -30,6 +30,16 @@ export const GIF_REPERTOIRE = [
     imgUrl: "https://media.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif",
     sound: "wow",
     origin: "Pulp Fiction Confused GIF"
+  },
+  {
+    id: "gif-roll-safe",
+    name: "Roll Safe (Think About It Kayode Ewumi)",
+    type: "gif",
+    emotions: ["genio", "inteligente", "truco", "logica_estupida"],
+    keywords: ["roll safe", "think about it", "cerebro", "truco", "logica", "inteligente"],
+    imgUrl: "https://media.giphy.com/media/d3mlE7uhX8KFgEmY/giphy.gif",
+    sound: "pop",
+    origin: "Roll Safe Think About It GIF"
   },
   {
     id: "gif-cat-jam",
@@ -62,6 +72,16 @@ export const GIF_REPERTOIRE = [
     origin: "Homer Bush GIF"
   },
   {
+    id: "gif-kermit-tea",
+    name: "Kermit Drinking Tea (None of My Business)",
+    type: "gif",
+    emotions: ["sarcasmo", "chisme", "no_es_mi_problema"],
+    keywords: ["kermit", "tea", "chisme", "no es mi problema", "rana kermit", "té"],
+    imgUrl: "https://media.giphy.com/media/3o85xGocUH8RYoDKKs/giphy.gif",
+    sound: "pop",
+    origin: "Kermit Drinking Tea GIF"
+  },
+  {
     id: "gif-popcat",
     name: "Popcat Opening Mouth",
     type: "gif",
@@ -70,6 +90,16 @@ export const GIF_REPERTOIRE = [
     imgUrl: "https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif",
     sound: "pop",
     origin: "Popcat GIF"
+  },
+  {
+    id: "gif-blinking-guy",
+    name: "Blinking White Guy (Drew Scanlon)",
+    type: "gif",
+    emotions: ["shock", "incredulidad", "que_dijo"],
+    keywords: ["blinking guy", "drew scanlon", "parpadear", "incredulo", "que dijo"],
+    imgUrl: "https://media.giphy.com/media/g3vAZUN5xUfPA1WSEE/giphy.gif",
+    sound: "wow",
+    origin: "Blinking Guy GIF"
   },
   {
     id: "gif-mind-blown",
@@ -86,7 +116,7 @@ export const GIF_REPERTOIRE = [
     name: "Ron Swanson Throws Computer in Dumpster",
     type: "gif",
     emotions: ["enojo", "frustracion", "codigo_basura"],
-    keywords: ["ron swanson", "computer dumpster", "tirar pc"],
+    keywords: ["ron swanson", "computer dumpster", "tirar pc", "cliente", "debug"],
     imgUrl: "https://media.giphy.com/media/133DKEhjvOJKy4/giphy.gif",
     sound: "emotionalDamage",
     origin: "Ron Swanson Computer GIF"
