@@ -9,8 +9,8 @@ export function MemeCard({ msg, onEditMeme }) {
   const meme = msg.meme || {};
   const captions = msg.captions || {};
 
-  const primaryImgUrl = meme.imgUrl || "https://i.imgflip.com/30b1gx.jpg";
-  const fallbackImgUrl = "https://i.imgflip.com/30b1gx.jpg";
+  const primaryImgUrl = meme.imgUrl || "https://i.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif";
+  const fallbackImgUrl = "https://i.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif";
 
   const handlePlaySound = () => {
     const soundType = meme.sound || 'wow';
@@ -109,38 +109,6 @@ export function MemeCard({ msg, onEditMeme }) {
             display: 'block'
           }}
         />
-
-        {/* Dynamic Impact Captions */}
-        {captions && (captions.topText || captions.bottomText) && (
-          <>
-            {captions.topText && (
-              <div className="meme-impact-text" style={{
-                position: 'absolute',
-                top: '12px',
-                left: '12px',
-                right: '12px',
-                textAlign: 'center',
-                fontSize: '24px',
-                lineHeight: '1.25'
-              }}>
-                {captions.topText}
-              </div>
-            )}
-            {captions.bottomText && (
-              <div className="meme-impact-text" style={{
-                position: 'absolute',
-                bottom: '12px',
-                left: '12px',
-                right: '12px',
-                textAlign: 'center',
-                fontSize: '24px',
-                lineHeight: '1.25'
-              }}>
-                {captions.bottomText}
-              </div>
-            )}
-          </>
-        )}
       </div>
 
       {/* Toolbar */}
