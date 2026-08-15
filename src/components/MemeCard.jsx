@@ -7,7 +7,6 @@ export function MemeCard({ msg, onEditMeme }) {
   const [imgError, setImgError] = useState(false);
 
   const meme = msg.meme || {};
-  const captions = msg.captions || {};
 
   const primaryImgUrl = meme.imgUrl || "https://i.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif";
   const fallbackImgUrl = "https://i.giphy.com/media/g01ZnwAUvutuK8GIQn/giphy.gif";
@@ -80,7 +79,7 @@ export function MemeCard({ msg, onEditMeme }) {
         </span>
       </div>
 
-      {/* Meme / GIF Image Container */}
+      {/* Pure GIF / Meme Image Container (Zero Bottom Text Overlay Allowed) */}
       <div style={{
         position: 'relative',
         minHeight: '300px',

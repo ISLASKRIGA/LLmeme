@@ -1,4 +1,4 @@
-// LLMeme Engine: 100% Pure Animated Reaction GIFs (No Text Overlay Clutter)
+// LLMeme Engine: 100% Famous Animated Reaction GIFs (No Bottom Text Overlays)
 import { GIF_REPERTOIRE } from './memeCatalog';
 
 export const GEMINI_KEYS = [
@@ -47,7 +47,7 @@ function parseJsonResponse(rawText) {
   return null;
 }
 
-// Gemini AI chooses the BEST Animated Reaction GIF for the situation
+// Gemini AI Query selecting the most famous GIF reaction
 async function queryGeminiPureGIF(prompt, availableGifs, customKey = null) {
   const keysToTry = customKey && customKey.trim().length > 10
     ? [customKey.trim(), ...GEMINI_KEYS]
@@ -56,7 +56,7 @@ async function queryGeminiPureGIF(prompt, availableGifs, customKey = null) {
   const shuffledAvailable = shuffleArray(availableGifs);
   const availableNamesList = shuffledAvailable.map(g => `"${g.name}"`).join(", ");
 
-  const promptText = `Eres LLMeme. Tu única tarea es responder a esta frase eligiendo EL GIF ANIMADO DE REACCIÓN MÁS DIVERTIDO Y PERFECTO:
+  const promptText = `Eres LLMeme. Tu única tarea es responder a esta frase eligiendo EL GIF ANIMADO DE REACCIÓN MÁS FAMOSO Y PERFECTO:
 
 Frase del usuario: "${prompt}"
 
@@ -152,7 +152,7 @@ export async function queryLLMeme(promptText, customApiKey = null) {
   const aiResult = await queryGeminiPureGIF(promptText, availableGifs, customApiKey);
 
   let selectedGif = shuffleArray(availableGifs)[0];
-  let emotionTag = "🎭 Reacción Cómica";
+  let emotionTag = "🎭 GIF Famoso de Reacción";
 
   if (aiResult && aiResult.template_name) {
     selectedGif = matchUnusedGif(aiResult.template_name, availableGifs);
@@ -183,7 +183,7 @@ export async function queryLLMeme(promptText, customApiKey = null) {
       sound: selectedGif.sound || "wow"
     },
     emotion: emotionTag,
-    // ZERO overlay text captions as requested! Pure GIF response!
+    // ZERO text overlays anywhere!
     captions: {
       topText: "",
       bottomText: ""
