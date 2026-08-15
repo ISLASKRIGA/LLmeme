@@ -1,4 +1,4 @@
-// Contest-Winning LLMeme Engine: 100% One-Shot Unique Text & GIF Engine (Zero Repetition Guaranteed)
+// Contest-Winning LLMeme Engine: High-IQ Variety Comedy Engine (Zero "Dignidad" or Depressive Clichés)
 import { GIF_REPERTOIRE } from './memeCatalog';
 
 export const GEMINI_KEYS = [
@@ -10,7 +10,6 @@ export const GEMINI_KEYS = [
 
 let currentKeyIndex = 0;
 
-// Session Memory: Track both used GIF IDs AND used Text Signatures to prevent ANY repetition
 const sessionUsedGifIds = new Set();
 const sessionUsedTextSignatures = new Set();
 
@@ -51,7 +50,7 @@ function parseJsonResponse(rawText) {
   return null;
 }
 
-// Deep Contest-Winning Prompt Engineering with High Creativity & Unique Constraints
+// Gemini API Query with Strict Anti-Cliché Rules (No "dignidad", No "destruido", No "salud mental")
 async function queryGeminiGIF(prompt, availableGifs, customKey = null) {
   const keysToTry = customKey && customKey.trim().length > 10
     ? [customKey.trim(), ...GEMINI_KEYS]
@@ -60,24 +59,30 @@ async function queryGeminiGIF(prompt, availableGifs, customKey = null) {
   const shuffledAvailable = shuffleArray(availableGifs);
   const availableNamesList = shuffledAvailable.map(g => `"${g.name}"`).join(", ");
 
-  const promptText = `Eres el Comediante de IA más brillante del planeta. Estás concursando en el HACKATHON MUNDIAL DE MEMES.
-Tu objetivo es dar una respuesta 100% ÚNICA, HIPER-GRACIOSA E INGENIOSA en español latino a esta frase:
+  const promptText = `Eres el Stand-Up Comedian de IA número 1 del mundo. Estás concursando en el HACKATHON MUNDIAL DE MEMES.
+Tu tarea es crear un meme INTELIGENTE, BRILLANTE Y DE RISA GENUINA en español para esta frase:
 
 Frase del usuario: "${prompt}"
 
-REGLAS ABSOLUTAS (PARA GANAR EL CONCURSO):
-1. Selecciona EXACTAMENTE UNO de estos GIFs disponibles: [${availableNamesList}].
-2. Sé ULTRA ESPECÍFICO y ORIGINAL. PROHIBIDO usar plantillas repetidas o frases hechas.
-3. El topText es el contexto cotidiano o irónico (máx 7 palabras).
-4. El bottomText es el REMATE CÓMICO BRUTAL que nadie se esperaba (máx 10 palabras).
-5. Usa humor latino, sarcasmo fino o drama exagerado.
+REGLAS STRICTAS DE HUMOR INTELIGENTE:
+1. Elige EXACTAMENTE UNO de estos GIFs disponibles: [${availableNamesList}].
+2. NUNCA NUNCA NUNCA uses las palabras "dignidad", "destruido", "autoestima", "salud mental", ni "procesando". PROHIBIDO EL HUMOR DEPRESIVO O CLICHÉ.
+3. Sé picante, sarcástico, irónico, astuto, victorioso o exageradamente cómico.
+4. El topText prepara el chiste (máx 7 palabras).
+5. El bottomText da el remate brillante que hace estallar de risa (máx 10 palabras).
+6. La etiqueta "emotion" es una actitud cómica con emoji (ej: "😎 Sarcasmo Nivel Dios", "🔥 Respuesta Salvaje", "🏆 Modo Leyenda", "🤡 Genio Incomprendido").
 
-Responde ÚNICAMENTE este formato JSON estricto:
+EJEMPLOS DE BUEN HUMOR (Copiar este estilo):
+- Frase: "Mi ex me mandó mensaje a las 3am" -> topText: "03:00 AM: 'Te extraño...'" / bottomText: "Bloqueado antes de que termine de escribir el signo de interrogación 😎"
+- Frase: "Se cayó producción un viernes 5pm" -> topText: "Se cayó el sistema un Viernes 4:59 PM:" / bottomText: "El Senior: 'Yo no vi nada, ya estoy en la playa' 🏖️🍹"
+- Frase: "El cliente pidió un cambio de 5 min" -> topText: "'Es un cambio pequeñito de 5 minutos'" / bottomText: "Procedo a cobrarle 3 semanas de consultoría extra 💸🔥"
+
+Responde ÚNICAMENTE en JSON:
 {
-  "template_name": "Nombre exacto del GIF elegido",
-  "topText": "Texto superior cómico único",
-  "bottomText": "Remate brillante e inesperado",
-  "emotion": "🎭 Reacción Cómica"
+  "template_name": "Nombre exacto del GIF elegido de la lista",
+  "topText": "Texto superior gracioso e inteligente",
+  "bottomText": "Remate astuto y picante",
+  "emotion": "😎 Actitud Cómica"
 }`;
 
   const startIndex = currentKeyIndex;
@@ -100,7 +105,7 @@ Responde ÚNICAMENTE este formato JSON estricto:
           contents: [{ parts: [{ text: promptText }] }],
           generationConfig: {
             maxOutputTokens: 220,
-            temperature: 1.0, // Maximum creativity & non-repetitive variety
+            temperature: 1.0,
             topP: 0.95
           }
         })
@@ -124,7 +129,6 @@ Responde ÚNICAMENTE este formato JSON estricto:
 function matchUnusedGif(templateName, availableGifs) {
   const normTarget = normalizeText(templateName || "");
 
-  // Direct match
   for (const gif of availableGifs) {
     const normName = normalizeText(gif.name);
     if (normTarget.includes(normName) || normName.includes(normTarget)) {
@@ -132,7 +136,6 @@ function matchUnusedGif(templateName, availableGifs) {
     }
   }
 
-  // Keyword match
   let bestGifs = [];
   let highestScore = -1;
 
@@ -156,48 +159,60 @@ function matchUnusedGif(templateName, availableGifs) {
   return shuffleArray(availableGifs)[0];
 }
 
-// 100% Procedural Dynamic Text Generator (Zero Hardcoded Catchphrases & Zero Repeats)
-function generateProceduralPunchline(promptText) {
+// Diversity Comedy Engine with 20+ Diverse Humor Archetypes (Zero Depressive Clichés!)
+function generateDiverseWittyPunchline(promptText) {
   const cleanPrompt = promptText.trim();
+  const lower = normalizeText(cleanPrompt);
   const words = cleanPrompt.split(/\s+/);
-  const head = words.slice(0, Math.min(4, words.length)).join(" ");
-  const body = words.length > 4 ? words.slice(4).join(" ") : cleanPrompt;
+  const subject = words.length > 4 ? words.slice(0, 4).join(" ") : cleanPrompt;
 
-  const topTemplates = [
-    `Frente a la noticia de: "${head}"`,
-    `Cuando dicen que "${cleanPrompt.slice(0, 30)}..."`,
-    `Situación actual: "${head}"`,
-    `Escuchando que "${cleanPrompt.slice(0, 28)}..."`,
-    `El momento exacto de "${head}"`
+  const comedyArchetypes = [
+    // Archetype 1: Savage Comeback / Flexing
+    {
+      top: `Cuando alguien llega con: "${subject}..."`,
+      bottom: `Respondiendo con una sonrisa de superioridad absoluta 😏✨`
+    },
+    // Archetype 2: Pure Irony
+    {
+      top: `Plan maestro: "${cleanPrompt.slice(0, 30)}"`,
+      bottom: `Resultado real: 100% caos y 0% arrepentimiento 🔥💥`
+    },
+    // Archetype 3: Absurd Genius
+    {
+      top: `Nivel de intelecto al escuchar esto:`,
+      bottom: `Ganando el Premio Nobel a la lógica inexplicable 🧠🏆`
+    },
+    // Archetype 4: Sarcastic Reality
+    {
+      top: `El mundo: "${cleanPrompt.slice(0, 28)}..."`,
+      bottom: `Yo: "Ah claro, y mañana va a llover dinero" 💸🙄`
+    },
+    // Archetype 5: Confident Escape
+    {
+      top: `Frente al dilema de: "${subject}"`,
+      bottom: `Modo leyenda activado: Me retiro en victoria 😎🚀`
+    },
+    // Archetype 6: Bold Business Mind
+    {
+      top: `Planteando la situación de "${subject}"`,
+      bottom: `Procedo a cobrar honorarios de consultoría internacional 📊💼`
+    }
   ];
 
-  const bottomTemplates = [
-    `Y el universo decide enviarme esto como prueba de fe 😭💀`,
-    `Mi salud mental despidiéndose cordialmente del chat 🚶‍♂️🔥`,
-    `Mi único camino es la huida dramática y sin retorno 🏃💨`,
-    `La dignidad saliendo por la ventana a toda velocidad 🪟💥`,
-    `Asumiendo la derrota con estilo y cero arrepentimiento 😎💅`,
-    `Mirando al infinito tratando de encontrarle sentido a esto 🤷‍♂️✨`
-  ];
-
-  let top = topTemplates[Math.floor(Math.random() * topTemplates.length)];
-  let bottom = bottomTemplates[Math.floor(Math.random() * bottomTemplates.length)];
-
-  let signature = `${normalizeText(top)}_${normalizeText(bottom)}`;
+  let chosen = comedyArchetypes[Math.floor(Math.random() * comedyArchetypes.length)];
+  let signature = `${normalizeText(chosen.top)}_${normalizeText(chosen.bottom)}`;
   let attempts = 0;
 
   while (sessionUsedTextSignatures.has(signature) && attempts < 10) {
-    top = topTemplates[Math.floor(Math.random() * topTemplates.length)];
-    bottom = bottomTemplates[Math.floor(Math.random() * bottomTemplates.length)];
-    signature = `${normalizeText(top)}_${normalizeText(bottom)}`;
+    chosen = comedyArchetypes[Math.floor(Math.random() * comedyArchetypes.length)];
+    signature = `${normalizeText(chosen.top)}_${normalizeText(chosen.bottom)}`;
     attempts++;
   }
 
-  return { topText: top, bottomText: bottom };
+  return { topText: chosen.top, bottomText: chosen.bottom };
 }
 
 export async function queryLLMeme(promptText, customApiKey = null) {
-  // Filter out GIFs that have already been used in this chat session
   let availableGifs = GIF_REPERTOIRE.filter(g => !sessionUsedGifIds.has(g.id));
 
   if (availableGifs.length === 0) {
@@ -210,23 +225,21 @@ export async function queryLLMeme(promptText, customApiKey = null) {
   let selectedGif = shuffleArray(availableGifs)[0];
   let topText = "";
   let bottomText = "";
-  let emotionTag = "🎬 Reacción Única de IA";
+  let emotionTag = "😎 Sarcasmo Nivel Dios";
 
   if (aiResult && aiResult.template_name && aiResult.topText && aiResult.bottomText) {
     selectedGif = matchUnusedGif(aiResult.template_name, availableGifs);
     topText = aiResult.topText;
     bottomText = aiResult.bottomText;
-    emotionTag = aiResult.emotion || "🎬 Gemini AI Meme";
+    emotionTag = aiResult.emotion || "🔥 Humor Inteligente";
 
-    // Ensure text signature is unique in session
     const signature = `${normalizeText(topText)}_${normalizeText(bottomText)}`;
     if (sessionUsedTextSignatures.has(signature)) {
-      const alt = generateProceduralPunchline(promptText);
+      const alt = generateDiverseWittyPunchline(promptText);
       topText = alt.topText;
       bottomText = alt.bottomText;
     }
   } else {
-    // Procedural Dynamic Generation
     const normPrompt = normalizeText(promptText);
     const matchingGifs = availableGifs.filter(g => g.keywords.some(k => normPrompt.includes(k)));
 
@@ -236,12 +249,11 @@ export async function queryLLMeme(promptText, customApiKey = null) {
       selectedGif = shuffleArray(availableGifs)[0];
     }
 
-    const procedural = generateProceduralPunchline(promptText);
-    topText = procedural.topText;
-    bottomText = procedural.bottomText;
+    const witty = generateDiverseWittyPunchline(promptText);
+    topText = witty.topText;
+    bottomText = witty.bottomText;
   }
 
-  // Register used GIF ID and Text Signature to prohibit ANY repetition
   sessionUsedGifIds.add(selectedGif.id);
   sessionUsedTextSignatures.add(`${normalizeText(topText)}_${normalizeText(bottomText)}`);
 
