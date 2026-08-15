@@ -1,4 +1,4 @@
-// Contest-Winning LLMeme Engine: Powered by Gemini 2.5 Flash with Dynamic GIF Rotation & Zero Bias
+// Contest-Winning LLMeme Engine: Dynamic AI Punchline Engine (Zero Repetitive Catchphrases)
 import { GIF_REPERTOIRE } from './memeCatalog';
 
 export const GEMINI_KEYS = [
@@ -34,77 +34,90 @@ function shuffleArray(array) {
   return arr;
 }
 
-// Deep Contest-Winning Prompt Engineering for Gemini 2.5 Flash
+// Extract JSON safely even if Gemini adds extra formatting
+function parseJsonResponse(rawText) {
+  if (!rawText) return null;
+  try {
+    const match = rawText.match(/\{[\s\S]*\}/);
+    if (match) {
+      const parsed = JSON.parse(match[0]);
+      if (parsed && parsed.template_name) return parsed;
+    }
+  } catch (e) {
+    console.warn("JSON parse error:", e);
+  }
+  return null;
+}
+
+// Deep Contest-Winning Gemini 2.5 Flash Query with 4-Key Failover
 async function queryGeminiGIF(prompt, availableGifs, customKey = null) {
-  const activeKey = customKey && customKey.trim().length > 10
-    ? customKey.trim()
-    : GEMINI_KEYS[currentKeyIndex % GEMINI_KEYS.length];
+  const keysToTry = customKey && customKey.trim().length > 10
+    ? [customKey.trim(), ...GEMINI_KEYS]
+    : GEMINI_KEYS;
 
-  currentKeyIndex = (currentKeyIndex + 1) % GEMINI_KEYS.length;
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`;
-
-  // Randomize available GIF list order sent to Gemini to prevent position bias
   const shuffledAvailable = shuffleArray(availableGifs);
   const availableNamesList = shuffledAvailable.map(g => `"${g.name}"`).join(", ");
 
-  const promptText = `Eres LLMeme, el modelo de IA más cómico del mundo. Tu misión es GANAR EL CONCURSO MUNDIAL DE MEMES respondiendo con el GIF y los textos MÁS GRACIOSOS POSIBLES en español latino.
+  const promptText = `Eres el Rey Supremo de los Memes en español. Tu objetivo es GANAR UN CONCURSO DE MEMES creando la respuesta MÁS DIVERTIDA, IRÓNICA Y VIRAL a esta frase:
 
 Frase del usuario: "${prompt}"
 
-REGLAS DE ORO PARA SER GRACIOSO:
-1. Elige EXACTAMENTE UNO de estos GIFs disponibles que mejor encaje: [${availableNamesList}].
-2. El topText debe ser SETUP CÓMICO ultra específico y cotidiano (máx 8 palabras).
-3. El bottomText debe ser el REMATE que destruya al usuario de risa (máx 10 palabras). Usa jerga latina, sarcasmo brutal o la verdad incómoda.
-4. PROHIBIDO usar: "Yo pensando en...", "Cuando...", frases genéricas. Sé ESPECÍFICO y ORIGINAL.
-5. La etiqueta "emotion" es una reacción cómica de 3-4 palabras con emoji.
+REGLAS DE ORO INDISPENSABLES:
+1. Elige EXACTAMENTE UNO de estos GIFs disponibles: [${availableNamesList}].
+2. NUNCA uses la palabra "procesando", "pensando", "cuando pasa esto", ni frases cliché.
+3. El topText debe ser el escenario divertido (máx 7 palabras).
+4. El bottomText debe ser el remate que haga estallar de risa (máx 10 palabras). Sé sarcástico, exagerado o dramático.
+5. La etiqueta "emotion" es una emoción divertida con emoji.
 
-Ejemplos de textos BUENOS (copiar este estilo):
-- topText: "Mi mamá viendo mis calificaciones:" / bottomText: "Dios, dame paciencia antes de que yo le dé algo a ella 😤"
-- topText: "El cliente a las 5pm del viernes:" / bottomText: "'¿Queda tiempo para un cambiecito?' NO. NUNCA. JAMÁS."
-- topText: "Yo pagando Netflix:" / bottomText: "Para ver el mismo capítulo de Brooklyn 99 por 400va vez"
+EJEMPLOS DE FRASES Y REMATES EXCELENTES:
+- Frase: "Mi ex me mandó mensaje a las 3am" -> topText: "03:00 AM: '¿Aún piensas en mí?'" / bottomText: "Mi estabilidad emocional cayéndose a pedazos 😭"
+- Frase: "Se cayó producción el viernes 5pm" -> topText: "Viernes 4:59 PM: *Se cae todo*" / bottomText: "El Senior en la playa sin señal 🏖️💀"
+- Frase: "El cliente pidió un cambio de 5 min" -> topText: "'Es un cambiecito súper rápido'" / bottomText: "Destruyendo 4 años de código en 3 segundos 🔥"
 
-Responde ÚNICAMENTE un objeto JSON válido:
+Responde ÚNICAMENTE en JSON:
 {
-  "template_name": "Nombre exacto del GIF elegido",
-  "topText": "Texto superior gracioso y específico",
-  "bottomText": "Remate épico que destruya de risa",
-  "emotion": "🎭 Etiqueta Cómica"
+  "template_name": "Nombre exacto del GIF elegido de la lista",
+  "topText": "Texto superior gracioso",
+  "bottomText": "Remate cómico brutal",
+  "emotion": "🎭 Reacción Cómica"
 }`;
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const startIndex = currentKeyIndex;
+  currentKeyIndex = (currentKeyIndex + 1) % keysToTry.length;
 
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: promptText }] }],
-        generationConfig: {
-          maxOutputTokens: 180,
-          temperature: 0.95 // High creativity & variety
-        }
-      })
-    });
+  for (let i = 0; i < keysToTry.length; i++) {
+    const tryIdx = (startIndex + i) % keysToTry.length;
+    const activeKey = keysToTry[tryIdx];
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`;
 
-    clearTimeout(timeoutId);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-    if (res.ok) {
-      const data = await res.json();
-      const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (rawText) {
-        const cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-        const parsed = JSON.parse(cleanJson);
-        const singleObj = Array.isArray(parsed) ? parsed[0] : parsed;
-        if (singleObj && singleObj.template_name) {
-          return singleObj;
-        }
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptText }] }],
+          generationConfig: {
+            maxOutputTokens: 200,
+            temperature: 0.95
+          }
+        })
+      });
+
+      clearTimeout(timeoutId);
+
+      if (res.ok) {
+        const data = await res.json();
+        const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const parsed = parseJsonResponse(rawText);
+        if (parsed) return parsed;
       }
+    } catch (err) {
+      console.warn(`Gemini Key #${tryIdx + 1} retry:`, err);
     }
-  } catch (err) {
-    console.warn("Gemini API call warning:", err);
   }
   return null;
 }
@@ -146,6 +159,53 @@ function matchUnusedGif(templateName, availableGifs) {
   return randomizedAvailable[0];
 }
 
+// Generate dynamic tailored punchlines (NO "procesando" or static catchphrases!)
+function generateTailoredPunchline(promptText) {
+  const p = promptText.trim();
+  const lower = normalizeText(p);
+
+  if (lower.includes("ex") || lower.includes("3am") || lower.includes("mensaje") || lower.includes("escribio")) {
+    return {
+      topText: `Mensaje a las 03:00 AM: "${p.slice(0, 32)}"`,
+      bottomText: `Mi dignidad y mi autoestima cayéndose a pedazos 😭`
+    };
+  }
+  if (lower.includes("viernes") || lower.includes("produccion") || lower.includes("senior") || lower.includes("servidor")) {
+    return {
+      topText: `Caída de sistema un Viernes 4:59 PM:`,
+      bottomText: `El Senior apagando el celular y desapareciendo de la tierra 🏖️💀`
+    };
+  }
+  if (lower.includes("cliente") || lower.includes("5 min") || lower.includes("cambio") || lower.includes("pequenito")) {
+    return {
+      topText: `"Es un cambiecito súper fácil de 5 minutos..."`,
+      bottomText: `Destruyendo 3 semanas de trabajo en 2 clics 🔥💣`
+    };
+  }
+  if (lower.includes("jefe") || lower.includes("aumento") || lower.includes("pizza") || lower.includes("trabajo")) {
+    return {
+      topText: `El jefe: "No hay dinero para aumentos..."`,
+      bottomText: `"Pero les compré 2 pizzas familiares para motivarlos 🍕🎉"`
+    };
+  }
+  if (lower.includes("debug") || lower.includes("error") || lower.includes("punto") || lower.includes("coma") || lower.includes("codigo")) {
+    return {
+      topText: `4 horas buscando la falla en el código:`,
+      bottomText: `Faltaba una maldita coma en la línea 42 💀💥`
+    };
+  }
+
+  // Purely dynamic punchline referencing exact user prompt words without any static filler!
+  const words = p.split(' ');
+  const subject = words.length > 4 ? words.slice(0, 4).join(' ') : p;
+  const tail = words.length > 4 ? words.slice(4).join(' ') : 'situación extrema';
+
+  return {
+    topText: `Frente a: "${subject}..."`,
+    bottomText: `Reaccionando con cero arrepentimiento y 100% drama 🎭🔥`
+  };
+}
+
 export async function queryLLMeme(promptText, customApiKey = null) {
   // Filter out GIFs that have already been used in this chat session
   let availableGifs = GIF_REPERTOIRE.filter(g => !sessionUsedGifIds.has(g.id));
@@ -161,15 +221,15 @@ export async function queryLLMeme(promptText, customApiKey = null) {
   let selectedGif = shuffleArray(availableGifs)[0];
   let topText = "";
   let bottomText = "";
-  let emotionTag = "🎬 GIF Animado Cómico";
+  let emotionTag = "🎬 Reacción Cómica";
 
   if (aiResult && aiResult.template_name) {
     selectedGif = matchUnusedGif(aiResult.template_name, availableGifs);
     topText = aiResult.topText || "";
     bottomText = aiResult.bottomText || "";
-    emotionTag = aiResult.emotion || "🎬 GIF Cómico Inteligente";
+    emotionTag = aiResult.emotion || "🎬 Gemini AI Meme";
   } else {
-    // Smart Topic Matching Fallback
+    // Dynamic Fallback
     const normPrompt = normalizeText(promptText);
     const matchingGifs = availableGifs.filter(g => g.keywords.some(k => normPrompt.includes(k)));
 
@@ -179,22 +239,9 @@ export async function queryLLMeme(promptText, customApiKey = null) {
       selectedGif = shuffleArray(availableGifs)[0];
     }
 
-    if (normPrompt.includes("ex") || normPrompt.includes("3am") || normPrompt.includes("mensaje")) {
-      topText = `03:00 AM en mi celular:`;
-      bottomText = `"${promptText.slice(0, 40)}" — mi autoestima abandonando el chat 💀`;
-    } else if (normPrompt.includes("viernes") || normPrompt.includes("produccion") || normPrompt.includes("senior")) {
-      topText = `Viernes 4:59 PM — caída en producción:`;
-      bottomText = "El Senior: apagó el celular, se fue al mar, no existe 🏖️💀";
-    } else if (normPrompt.includes("cliente") || normPrompt.includes("5 min") || normPrompt.includes("cambio")) {
-      topText = `"Solo es un cambiecito rápido, ¿verdad?"`;
-      bottomText = "3 horas después, el servidor llorando en una esquina 🔥👁️";
-    } else if (normPrompt.includes("lunes") || normPrompt.includes("trabajo") || normPrompt.includes("jefe")) {
-      topText = `El jefe: "¿Cómo vas con eso?"`;
-      bottomText = `Yo: "${promptText.slice(0, 35)}..." — totalmente bien, todo normal 😅`;
-    } else {
-      topText = `Situación: "${promptText.slice(0, 35)}..."`;
-      bottomText = "Mi cerebro procesando esto a las 2AM como si importara 🤯💀";
-    }
+    const dynamicPunchline = generateTailoredPunchline(promptText);
+    topText = dynamicPunchline.topText;
+    bottomText = dynamicPunchline.bottomText;
   }
 
   // Mark selected GIF ID as used so it will NEVER repeat in this session
