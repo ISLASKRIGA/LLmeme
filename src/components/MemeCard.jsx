@@ -7,6 +7,8 @@ export function MemeCard({ msg, onEditMeme }) {
   const [imgError, setImgError] = useState(false);
 
   const meme = msg.meme || {};
+  const captions = msg.captions || {};
+
   const primaryImgUrl = meme.imgUrl || "https://i.imgflip.com/30b1gx.jpg";
   const fallbackImgUrl = "https://i.imgflip.com/30b1gx.jpg";
 
@@ -26,6 +28,8 @@ export function MemeCard({ msg, onEditMeme }) {
     memeAudio.playPop();
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const isDrake = meme.name && meme.name.toLowerCase().includes('drake');
 
   return (
     <div className="neo-box" style={{
@@ -78,7 +82,7 @@ export function MemeCard({ msg, onEditMeme }) {
         </span>
       </div>
 
-      {/* 100% Unblockable Meme Image Container */}
+      {/* Meme Image Container with Overlay Captions */}
       <div style={{
         position: 'relative',
         minHeight: '300px',
@@ -107,6 +111,59 @@ export function MemeCard({ msg, onEditMeme }) {
             display: 'block'
           }}
         />
+
+        {/* Impact Meme Captions Rendered Directly on Image */}
+        {captions && (captions.topText || captions.bottomText) && (
+          <>
+            {/* Top Text / Drake Top Right Panel */}
+            {captions.topText && (
+              <div style={{
+                position: 'absolute',
+                top: isDrake ? '12%' : '10px',
+                left: isDrake ? '52%' : '10px',
+                right: '10px',
+                textAlign: isDrake ? 'left' : 'center',
+                fontSize: isDrake ? '16px' : '22px',
+                fontWeight: '900',
+                lineHeight: '1.2',
+                color: isDrake ? '#000' : '#fff',
+                fontFamily: isDrake ? 'var(--font-mono)' : 'Impact, sans-serif',
+                textTransform: 'uppercase',
+                textShadow: isDrake ? 'none' : '2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                background: isDrake ? 'rgba(255,255,255,0.85)' : 'transparent',
+                pointerEvents: 'none'
+              }}>
+                {captions.topText}
+              </div>
+            )}
+
+            {/* Bottom Text / Drake Bottom Right Panel */}
+            {captions.bottomText && (
+              <div style={{
+                position: 'absolute',
+                bottom: isDrake ? '12%' : '12px',
+                left: isDrake ? '52%' : '10px',
+                right: '10px',
+                textAlign: isDrake ? 'left' : 'center',
+                fontSize: isDrake ? '16px' : '22px',
+                fontWeight: '900',
+                lineHeight: '1.2',
+                color: isDrake ? '#000' : '#fff',
+                fontFamily: isDrake ? 'var(--font-mono)' : 'Impact, sans-serif',
+                textTransform: 'uppercase',
+                textShadow: isDrake ? 'none' : '2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                background: isDrake ? 'rgba(255,255,255,0.85)' : 'transparent',
+                pointerEvents: 'none'
+              }}>
+                {captions.bottomText}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* Toolbar */}

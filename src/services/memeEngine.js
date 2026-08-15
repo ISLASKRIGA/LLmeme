@@ -1,5 +1,5 @@
-// LLMeme Engine: 100% Famous Animated Reaction GIFs (No Bottom Text Overlays)
-import { GIF_REPERTOIRE } from './memeCatalog';
+// LLMeme Engine: Intelligent Meme Captions Tailored to Each Template & Prompt
+import { MEME_CATALOG } from './memeCatalog';
 
 export const GEMINI_KEYS = [
   "AIzaSyBWVUuVWh3GvU-tXO0EfD7NWo9J2yqOa2Y",
@@ -9,10 +9,10 @@ export const GEMINI_KEYS = [
 ];
 
 let currentKeyIndex = 0;
-const sessionUsedGifIds = new Set();
+const sessionUsedMemeIds = new Set();
 
 export function clearSessionMemory() {
-  sessionUsedGifIds.clear();
+  sessionUsedMemeIds.clear();
 }
 
 function normalizeText(text) {
@@ -47,25 +47,39 @@ function parseJsonResponse(rawText) {
   return null;
 }
 
-// Gemini AI Query selecting the most famous GIF reaction
-async function queryGeminiPureGIF(prompt, availableGifs, customKey = null) {
+async function queryGeminiMemeImage(prompt, availableMemes, customKey = null) {
   const keysToTry = customKey && customKey.trim().length > 10
     ? [customKey.trim(), ...GEMINI_KEYS]
     : GEMINI_KEYS;
 
-  const shuffledAvailable = shuffleArray(availableGifs);
-  const availableNamesList = shuffledAvailable.map(g => `"${g.name}"`).join(", ");
+  const shuffledAvailable = shuffleArray(availableMemes);
+  const availableNamesList = shuffledAvailable.map(m => `"${m.name}"`).join(", ");
 
-  const promptText = `Eres LLMeme. Tu única tarea es responder a esta frase eligiendo EL GIF ANIMADO DE REACCIÓN MÁS FAMOSO Y PERFECTO:
+  const promptText = `Eres un Generador de Memes de Inteligencia Artificial de alto nivel.
+Dada la frase del usuario: "${prompt}"
 
-Frase del usuario: "${prompt}"
+Elige la mejor plantilla de esta lista: [${availableNamesList}] y crea los dos textos del meme (topText y bottomText).
 
-Elige EXACTAMENTE UNO de estos GIFs disponibles: [${availableNamesList}].
+REGLAS DE FORMATO:
+- Si eliges "Drake Hotline Bling": topText = lo que rechaza Drake (máx 5 palabras). bottomText = lo que prefiere Drake (máx 5 palabras).
+- Si eliges "Two Buttons": topText = opción 1 absurda. bottomText = opción 2 real.
+- Si eliges "Woman Yelling At Cat": topText = lo que grita la señora. bottomText = lo que responde el gato.
+- Para otras plantillas: topText = contexto corto (3-5 palabras). bottomText = remate cómico (3-5 palabras).
+
+Ejemplo para "${prompt}" con Drake:
+{
+  "template_name": "Drake Hotline Bling",
+  "topText": "Hacer el cambiecito gratis",
+  "bottomText": "Cobrar 3 semanas extra 💸",
+  "emotion": "😎 Aprobación Total"
+}
 
 Responde ÚNICAMENTE en JSON:
 {
-  "template_name": "Nombre exacto del GIF elegido de la lista",
-  "emotion": "🎭 Reacción Cómica Corta con Emoji"
+  "template_name": "Nombre exacto del meme elegido",
+  "topText": "Texto superior corto",
+  "bottomText": "Texto inferior remate",
+  "emotion": "😎 Actitud Cómica"
 }`;
 
   const startIndex = currentKeyIndex;
@@ -87,8 +101,9 @@ Responde ÚNICAMENTE en JSON:
         body: JSON.stringify({
           contents: [{ parts: [{ text: promptText }] }],
           generationConfig: {
-            maxOutputTokens: 100,
-            temperature: 0.9
+            maxOutputTokens: 180,
+            temperature: 0.9,
+            topP: 0.9
           }
         })
       });
@@ -108,88 +123,113 @@ Responde ÚNICAMENTE en JSON:
   return null;
 }
 
-function matchUnusedGif(templateName, availableGifs) {
+function matchUnusedMeme(templateName, availableMemes) {
   const normTarget = normalizeText(templateName || "");
 
-  for (const gif of availableGifs) {
-    const normName = normalizeText(gif.name);
+  for (const meme of availableMemes) {
+    const normName = normalizeText(meme.name);
     if (normTarget.includes(normName) || normName.includes(normTarget)) {
-      return gif;
+      return meme;
     }
   }
 
-  let bestGifs = [];
+  let bestMemes = [];
   let highestScore = -1;
 
-  for (const gif of availableGifs) {
+  for (const meme of availableMemes) {
     let score = 0;
-    for (const kw of gif.keywords) {
+    for (const kw of meme.keywords) {
       if (normTarget.includes(kw)) score += 3;
     }
     if (score > highestScore) {
       highestScore = score;
-      bestGifs = [gif];
+      bestMemes = [meme];
     } else if (score === highestScore && score > 0) {
-      bestGifs.push(gif);
+      bestMemes.push(meme);
     }
   }
 
-  if (bestGifs.length > 0) {
-    return bestGifs[Math.floor(Math.random() * bestGifs.length)];
+  if (bestMemes.length > 0) {
+    return bestMemes[Math.floor(Math.random() * bestMemes.length)];
   }
 
-  return shuffleArray(availableGifs)[0];
+  return shuffleArray(availableMemes)[0];
+}
+
+function generateFallbackCaptions(promptText, memeName) {
+  const isDrake = memeName && memeName.toLowerCase().includes('drake');
+  const cleanPrompt = promptText.trim();
+  const words = cleanPrompt.split(/\s+/);
+  const shortHead = words.slice(0, Math.min(3, words.length)).join(" ");
+
+  if (isDrake) {
+    return {
+      topText: `Hacer "${shortHead}" gratis`,
+      bottomText: "Cobrar 3 semanas extra 💸"
+    };
+  }
+
+  return {
+    topText: `Frente a: "${shortHead}"`,
+    bottomText: "Modo leyenda activado 😎"
+  };
 }
 
 export async function queryLLMeme(promptText, customApiKey = null) {
-  let availableGifs = GIF_REPERTOIRE.filter(g => !sessionUsedGifIds.has(g.id));
+  let availableMemes = MEME_CATALOG.filter(m => !sessionUsedMemeIds.has(m.id));
 
-  if (availableGifs.length === 0) {
-    sessionUsedGifIds.clear();
-    availableGifs = [...GIF_REPERTOIRE];
+  if (availableMemes.length === 0) {
+    sessionUsedMemeIds.clear();
+    availableMemes = [...MEME_CATALOG];
   }
 
-  const aiResult = await queryGeminiPureGIF(promptText, availableGifs, customApiKey);
+  const aiResult = await queryGeminiMemeImage(promptText, availableMemes, customApiKey);
 
-  let selectedGif = shuffleArray(availableGifs)[0];
-  let emotionTag = "🎭 GIF Famoso de Reacción";
+  let selectedMeme = shuffleArray(availableMemes)[0];
+  let topText = "";
+  let bottomText = "";
+  let emotionTag = "😎 Meme de Imagen";
 
   if (aiResult && aiResult.template_name) {
-    selectedGif = matchUnusedGif(aiResult.template_name, availableGifs);
-    emotionTag = aiResult.emotion || selectedGif.emotions?.[0] || "🎭 GIF Animado";
+    selectedMeme = matchUnusedMeme(aiResult.template_name, availableMemes);
+    topText = aiResult.topText || "";
+    bottomText = aiResult.bottomText || "";
+    emotionTag = aiResult.emotion || "🔥 Meme Directo";
   } else {
     const normPrompt = normalizeText(promptText);
-    const matchingGifs = availableGifs.filter(g => g.keywords.some(k => normPrompt.includes(k)));
+    const matchingMemes = availableMemes.filter(m => m.keywords.some(k => normPrompt.includes(k)));
 
-    if (matchingGifs.length > 0) {
-      selectedGif = shuffleArray(matchingGifs)[0];
+    if (matchingMemes.length > 0) {
+      selectedMeme = shuffleArray(matchingMemes)[0];
     } else {
-      selectedGif = shuffleArray(availableGifs)[0];
+      selectedMeme = shuffleArray(availableMemes)[0];
     }
-    emotionTag = selectedGif.emotions?.[0] || "🎬 GIF Cómico";
+
+    const fallback = generateFallbackCaptions(promptText, selectedMeme.name);
+    topText = fallback.topText;
+    bottomText = fallback.bottomText;
   }
 
-  sessionUsedGifIds.add(selectedGif.id);
+  sessionUsedMemeIds.add(selectedMeme.id);
 
   return {
     id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
     prompt: promptText,
     meme: {
-      id: selectedGif.id,
-      name: selectedGif.name,
-      type: "gif",
-      imgUrl: selectedGif.imgUrl,
-      origin: selectedGif.origin || "Pure Reaction GIF Vault",
-      sound: selectedGif.sound || "wow"
+      id: selectedMeme.id,
+      name: selectedMeme.name,
+      type: "image",
+      imgUrl: selectedMeme.imgUrl,
+      origin: selectedMeme.origin || "Classic Meme Image Vault",
+      sound: selectedMeme.sound || "wow"
     },
     emotion: emotionTag,
-    // ZERO text overlays anywhere!
     captions: {
-      topText: "",
-      bottomText: ""
+      topText: topText,
+      bottomText: bottomText
     },
     confidence: "99.9% Match",
-    source: "🎬 Gemini 2.5 Flash Pure GIF Engine",
+    source: "✨ Gemini 2.5 Flash Meme Engine",
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   };
 }
