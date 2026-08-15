@@ -7,7 +7,6 @@ export function ChatWindow({ messages, isLoading, onSendMessage, onClearChat, on
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef(null);
 
-  // Strictly 3 Top Hilarious Meme Prompts
   const TOP_3_HILARIOUS_PROMPTS = [
     '🤡 "Mi ex me puso: \'Te extraño, ¿estás despierto?\' a las 3 AM"',
     '😱 "Se cayó producción un Viernes a las 4:59 PM y el Senior apagó el celular"',
@@ -86,12 +85,9 @@ export function ChatWindow({ messages, isLoading, onSendMessage, onClearChat, on
               🗿
             </div>
 
-            <h2 style={{ fontSize: '20px', fontWeight: '900', textTransform: 'uppercase', marginBottom: '8px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '900', textTransform: 'uppercase', marginBottom: '24px' }}>
               Escríbele lo que sea. Te va a contestar solo con memes y GIFs graciosos.
             </h2>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#555', marginBottom: '24px' }}>
-              Impulsado por Google Gemini 2.5 Flash + Web Audio SFX
-            </p>
 
             {/* Top 3 Hilarious Prompt Chips */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', maxWidth: '750px' }}>
