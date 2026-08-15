@@ -7,13 +7,15 @@ export function ChatWindow({ messages, isLoading, onSendMessage, onClearChat, on
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef(null);
 
-  const FUNNY_PROMPTS = [
-    "cuál es la mejor banda del mundo",
-    "se cayó producción un viernes a las 6pm",
-    "mi ex me mandó mensaje a las 3 AM",
-    "llevo 3 horas debuggeando un punto y coma",
-    "¿React o Vue?",
-    "mi jefe dice que lo hagamos con blockchain"
+  const HILARIOUS_PROMPTS = [
+    '🤡 "Mi ex me puso: \'Te extraño, ¿estás despierto?\' a las 3 AM"',
+    '🔥 "El cliente: \'Es un cambio súper pequeñito, no te toma ni 5 min\'"',
+    '😱 "Se cayó producción un Viernes a las 4:59 PM y el Senior apagó el celular"',
+    '💀 "Llevo 4 horas debuggeando el código y el error era un punto y coma"',
+    '💸 "Gané 10 dólares en Cripto y ya me siento el Lobo de Wall Street"',
+    '🧠 "Mi mamá: \'Explícame qué es la Nube pero sin usar términos raros\'"',
+    '🥴 "El jefe: \'No hay presupuesto para aumentos pero les traje pizza 🍕\'"',
+    '⚡ "El código compiló a la primera sin ningún warning ni error"'
   ];
 
   const scrollToBottom = () => {
@@ -95,16 +97,20 @@ export function ChatWindow({ messages, isLoading, onSendMessage, onClearChat, on
               Impulsado por Google Gemini 2.5 Flash + Web Audio SFX
             </p>
 
-            {/* Chips */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', maxWidth: '750px' }}>
-              {FUNNY_PROMPTS.map((prompt, idx) => (
+            {/* Hilarious Prompt Chips */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', maxWidth: '800px' }}>
+              {HILARIOUS_PROMPTS.map((prompt, idx) => (
                 <button
                   key={idx}
                   className="neo-btn"
-                  style={{ background: '#fff', fontSize: '12px', textTransform: 'none' }}
-                  onClick={() => { memeAudio.playPop(); onSendMessage(prompt); }}
+                  style={{ background: '#fff', fontSize: '12px', textTransform: 'none', padding: '10px 14px' }}
+                  onClick={() => {
+                    const cleanText = prompt.replace(/^.*?"/, '').replace(/"$/, '');
+                    memeAudio.playPop();
+                    onSendMessage(cleanText);
+                  }}
                 >
-                  "{prompt}"
+                  {prompt}
                 </button>
               ))}
             </div>
@@ -165,7 +171,7 @@ export function ChatWindow({ messages, isLoading, onSendMessage, onClearChat, on
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Ultra Clean Bottom Fixed Input Bar (Sorpresa, Roast Me, and Bottom status line removed as requested) */}
+      {/* Floating Bottom Input Bar */}
       <div style={{
         position: 'fixed',
         bottom: '20px',
